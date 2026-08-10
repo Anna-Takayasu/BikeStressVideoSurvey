@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>YouTube Embed Diagnostic</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .box {
+      margin: 28px 0;
+      padding: 18px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 0;
+      background: black;
+    }
+    code {
+      background: #f3f3f3;
+      padding: 2px 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>YouTube Embed Diagnostic</h1>
+
+  <p>
+    This page contains no questionnaire logic and no YouTube JavaScript API.
+    It tests whether the browser/network can play the uploaded YouTube video
+    inside a normal iframe.
+  </p>
+
+  <div class="box">
+    <h2>Test A — Standard YouTube embed</h2>
+    <p>V001 / <code>DhWo1aD2nwI</code></p>
+    <iframe
+      src="https://www.youtube.com/embed/DhWo1aD2nwI?controls=1&rel=0"
+      title="YouTube standard embed test"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <div class="box">
+    <h2>Test B — Privacy-enhanced YouTube embed</h2>
+    <p>V001 / <code>DhWo1aD2nwI</code></p>
+    <iframe
+      src="https://www.youtube-nocookie.com/embed/DhWo1aD2nwI?controls=1&rel=0"
+      title="YouTube privacy-enhanced embed test"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <div class="box">
+    <h2>Test C — V002 standard embed</h2>
+    <p>V002 / <code>aY8CkSoGuFI</code></p>
+    <iframe
+      src="https://www.youtube.com/embed/aY8CkSoGuFI?controls=1&rel=0"
+      title="YouTube second-video embed test"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen>
+    </iframe>
+  </div>
+</body>
+</html>
