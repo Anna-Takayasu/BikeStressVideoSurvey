@@ -1,0 +1,1328 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Video Stress Pairwise Survey — GitHub Test</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1050px;
+      margin: 28px auto;
+      padding: 0 18px 50px;
+      background: #f7f7f7;
+      color: #222;
+    }
+    .card {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    }
+    .hidden { display: none !important; }
+    .small { color: #666; font-size: 14px; line-height: 1.45; }
+    .progress { font-weight: bold; margin-bottom: 8px; }
+    .question { margin: 20px 0; }
+    label { display: block; font-weight: bold; margin-bottom: 7px; }
+    select, input {
+      font-size: 16px;
+      padding: 8px;
+      width: min(100%, 650px);
+    }
+    select[multiple] { min-height: 180px; }
+    button {
+      font-size: 18px;
+      padding: 12px 22px;
+      margin: 8px;
+      cursor: pointer;
+      border-radius: 7px;
+      border: 1px solid #999;
+      background: #fff;
+    }
+    button:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+    .buttons { text-align: center; margin-top: 18px; }
+    .checkbox-row {
+      margin: 7px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .checkbox-row input {
+      width: auto;
+      margin: 0;
+    }
+    .frequency-grid {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+    .frequency-grid th, .frequency-grid td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      vertical-align: top;
+    }
+    .frequency-grid th {
+      background: #f2f2f2;
+      text-align: left;
+    }
+    .frequency-grid select {
+      width: 100%;
+      font-size: 15px;
+    }
+    .youtube-panel {
+      background: #111;
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 16px;
+    }
+    .video-label {
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 0 0 8px 4px;
+    }
+    .youtube-stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      min-height: 270px;
+      max-height: 540px;
+      background: black;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+    #youtubePlayer {
+      width: 100%;
+      height: 100%;
+      background: black;
+    }
+    #youtubePlayer iframe {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+    #finishedOverlay {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+      color: white;
+      font-size: 22px;
+      font-weight: bold;
+      z-index: 5;
+    }
+    .notice {
+      background: #eef5ff;
+      padding: 12px 14px;
+      border-radius: 8px;
+      margin: 12px 0;
+    }
+    .downloads {
+      margin-top: 20px;
+      padding: 16px;
+      background: #f5f5f5;
+      border-radius: 9px;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <div id="startScreen">
+    <h2>Video comparison questionnaire — GitHub test</h2>
+    <p class="small">
+      Test participant ID: <b id="pidDisplay"></b><br>
+      This test saves progress only in this browser.
+    </p>
+    <button onclick="startOrResume()">Start / Resume</button>
+  </div>
+
+  <div id="demographicScreen" class="hidden">
+    <h2>Sociodemographic questionnaire</h2>
+    <p class="small">Please answer the following questions before the video comparison task.</p>
+
+    <div class="question">
+      <label for="sexSelect">What is your biological sex?</label>
+      <select id="sexSelect">
+        <option value="">Please select</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Prefer not to say</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="question">
+      <label for="ageSelect">What is your age?</label>
+      <select id="ageSelect">
+        <option value="">Please select</option>
+        <option>&lt;20</option>
+        <option>21-25</option>
+        <option>26-30</option>
+        <option>31-35</option>
+        <option>36-40</option>
+        <option>41-45</option>
+        <option>46-50</option>
+        <option>51-55</option>
+        <option>56-60</option>
+        <option>&gt;61</option>
+      </select>
+    </div>
+
+    <div class="question">
+      <label for="nationalitySelect">What is your nationality?</label>
+      <select id="nationalitySelect">
+        <option value="">Please select</option>
+        <option value="1">1 - Afghanistan</option>
+        <option value="2">2 - Albania</option>
+        <option value="3">3 - Algeria</option>
+        <option value="4">4 - Andorra</option>
+        <option value="5">5 - Angola</option>
+        <option value="6">6 - Antigua and Barbuda</option>
+        <option value="7">7 - Argentina</option>
+        <option value="8">8 - Armenia</option>
+        <option value="9">9 - Australia</option>
+        <option value="10">10 - Austria</option>
+        <option value="11">11 - Azerbaijan</option>
+        <option value="12">12 - Bahamas</option>
+        <option value="13">13 - Bahrain</option>
+        <option value="14">14 - Bangladesh</option>
+        <option value="15">15 - Barbados</option>
+        <option value="16">16 - Belarus</option>
+        <option value="17">17 - Belgium</option>
+        <option value="18">18 - Belize</option>
+        <option value="19">19 - Benin</option>
+        <option value="20">20 - Bhutan</option>
+        <option value="21">21 - Bolivia</option>
+        <option value="22">22 - Bosnia and Herzegovina</option>
+        <option value="23">23 - Botswana</option>
+        <option value="24">24 - Brazil</option>
+        <option value="25">25 - Brunei</option>
+        <option value="26">26 - Bulgaria</option>
+        <option value="27">27 - Burkina Faso</option>
+        <option value="28">28 - Burundi</option>
+        <option value="29">29 - Cabo Verde</option>
+        <option value="30">30 - Cambodia</option>
+        <option value="31">31 - Cameroon</option>
+        <option value="32">32 - Canada</option>
+        <option value="33">33 - Central African Republic</option>
+        <option value="34">34 - Chad</option>
+        <option value="35">35 - Chile</option>
+        <option value="36">36 - China</option>
+        <option value="37">37 - Colombia</option>
+        <option value="38">38 - Comoros</option>
+        <option value="39">39 - Congo</option>
+        <option value="40">40 - Costa Rica</option>
+        <option value="41">41 - Croatia</option>
+        <option value="42">42 - Cuba</option>
+        <option value="43">43 - Cyprus</option>
+        <option value="44">44 - Czech Republic</option>
+        <option value="45">45 - Denmark</option>
+        <option value="46">46 - Djibouti</option>
+        <option value="47">47 - Dominica</option>
+        <option value="48">48 - Dominican Republic</option>
+        <option value="49">49 - Ecuador</option>
+        <option value="50">50 - Egypt</option>
+        <option value="51">51 - El Salvador</option>
+        <option value="52">52 - Equatorial Guinea</option>
+        <option value="53">53 - Eritrea</option>
+        <option value="54">54 - Estonia</option>
+        <option value="55">55 - Eswatini</option>
+        <option value="56">56 - Ethiopia</option>
+        <option value="57">57 - Fiji</option>
+        <option value="58">58 - Finland</option>
+        <option value="59">59 - France</option>
+        <option value="60">60 - Gabon</option>
+        <option value="61">61 - Gambia</option>
+        <option value="62">62 - Georgia</option>
+        <option value="63">63 - Germany</option>
+        <option value="64">64 - Ghana</option>
+        <option value="65">65 - Greece</option>
+        <option value="66">66 - Grenada</option>
+        <option value="67">67 - Guatemala</option>
+        <option value="68">68 - Guinea</option>
+        <option value="69">69 - Guinea-Bissau</option>
+        <option value="70">70 - Guyana</option>
+        <option value="71">71 - Haiti</option>
+        <option value="72">72 - Honduras</option>
+        <option value="73">73 - Hungary</option>
+        <option value="74">74 - Iceland</option>
+        <option value="75">75 - India</option>
+        <option value="76">76 - Indonesia</option>
+        <option value="77">77 - Iran</option>
+        <option value="78">78 - Iraq</option>
+        <option value="79">79 - Ireland</option>
+        <option value="80">80 - Israel</option>
+        <option value="81">81 - Italy</option>
+        <option value="82">82 - Ivory Coast</option>
+        <option value="83">83 - Jamaica</option>
+        <option value="84">84 - Japan</option>
+        <option value="85">85 - Jordan</option>
+        <option value="86">86 - Kazakhstan</option>
+        <option value="87">87 - Kenya</option>
+        <option value="88">88 - Kiribati</option>
+        <option value="89">89 - Kuwait</option>
+        <option value="90">90 - Kyrgyzstan</option>
+        <option value="91">91 - Laos</option>
+        <option value="92">92 - Latvia</option>
+        <option value="93">93 - Lebanon</option>
+        <option value="94">94 - Lesotho</option>
+        <option value="95">95 - Liberia</option>
+        <option value="96">96 - Libya</option>
+        <option value="97">97 - Liechtenstein</option>
+        <option value="98">98 - Lithuania</option>
+        <option value="99">99 - Luxembourg</option>
+        <option value="100">100 - Madagascar</option>
+        <option value="101">101 - Malawi</option>
+        <option value="102">102 - Malaysia</option>
+        <option value="103">103 - Maldives</option>
+        <option value="104">104 - Mali</option>
+        <option value="105">105 - Malta</option>
+        <option value="106">106 - Marshall Islands</option>
+        <option value="107">107 - Mauritania</option>
+        <option value="108">108 - Mauritius</option>
+        <option value="109">109 - Mexico</option>
+        <option value="110">110 - Micronesia</option>
+        <option value="111">111 - Moldova</option>
+        <option value="112">112 - Monaco</option>
+        <option value="113">113 - Mongolia</option>
+        <option value="114">114 - Montenegro</option>
+        <option value="115">115 - Morocco</option>
+        <option value="116">116 - Mozambique</option>
+        <option value="117">117 - Myanmar</option>
+        <option value="118">118 - Namibia</option>
+        <option value="119">119 - Nauru</option>
+        <option value="120">120 - Nepal</option>
+        <option value="121">121 - Netherlands</option>
+        <option value="122">122 - New Zealand</option>
+        <option value="123">123 - Nicaragua</option>
+        <option value="124">124 - Niger</option>
+        <option value="125">125 - Nigeria</option>
+        <option value="126">126 - North Korea</option>
+        <option value="127">127 - North Macedonia</option>
+        <option value="128">128 - Norway</option>
+        <option value="129">129 - Oman</option>
+        <option value="130">130 - Pakistan</option>
+        <option value="131">131 - Palau</option>
+        <option value="132">132 - Panama</option>
+        <option value="133">133 - Papua New Guinea</option>
+        <option value="134">134 - Paraguay</option>
+        <option value="135">135 - Peru</option>
+        <option value="136">136 - Philippines</option>
+        <option value="137">137 - Poland</option>
+        <option value="138">138 - Portugal</option>
+        <option value="139">139 - Qatar</option>
+        <option value="140">140 - Romania</option>
+        <option value="141">141 - Russia</option>
+        <option value="142">142 - Rwanda</option>
+        <option value="143">143 - Saint Kitts and Nevis</option>
+        <option value="144">144 - Saint Lucia</option>
+        <option value="145">145 - Saint Vincent and the Grenadines</option>
+        <option value="146">146 - Samoa</option>
+        <option value="147">147 - San Marino</option>
+        <option value="148">148 - Sao Tome and Principe</option>
+        <option value="149">149 - Saudi Arabia</option>
+        <option value="150">150 - Senegal</option>
+        <option value="151">151 - Serbia</option>
+        <option value="152">152 - Seychelles</option>
+        <option value="153">153 - Sierra Leone</option>
+        <option value="154">154 - Singapore</option>
+        <option value="155">155 - Slovakia</option>
+        <option value="156">156 - Slovenia</option>
+        <option value="157">157 - Solomon Islands</option>
+        <option value="158">158 - Somalia</option>
+        <option value="159">159 - South Africa</option>
+        <option value="160">160 - South Korea</option>
+        <option value="161">161 - South Sudan</option>
+        <option value="162">162 - Spain</option>
+        <option value="163">163 - Sri Lanka</option>
+        <option value="164">164 - Sudan</option>
+        <option value="165">165 - Suriname</option>
+        <option value="166">166 - Sweden</option>
+        <option value="167">167 - Switzerland</option>
+        <option value="168">168 - Syria</option>
+        <option value="169">169 - Taiwan</option>
+        <option value="170">170 - Tajikistan</option>
+        <option value="171">171 - Tanzania</option>
+        <option value="172">172 - Thailand</option>
+        <option value="173">173 - Timor-Leste</option>
+        <option value="174">174 - Togo</option>
+        <option value="175">175 - Tonga</option>
+        <option value="176">176 - Trinidad and Tobago</option>
+        <option value="177">177 - Tunisia</option>
+        <option value="178">178 - Turkey</option>
+        <option value="179">179 - Turkmenistan</option>
+        <option value="180">180 - Tuvalu</option>
+        <option value="181">181 - Uganda</option>
+        <option value="182">182 - Ukraine</option>
+        <option value="183">183 - United Arab Emirates</option>
+        <option value="184">184 - United Kingdom</option>
+        <option value="185">185 - United States</option>
+        <option value="186">186 - Uruguay</option>
+        <option value="187">187 - Uzbekistan</option>
+        <option value="188">188 - Vanuatu</option>
+        <option value="189">189 - Venezuela</option>
+        <option value="190">190 - Vietnam</option>
+        <option value="191">191 - Yemen</option>
+        <option value="192">192 - Zambia</option>
+        <option value="193">193 - Zimbabwe</option>
+      </select>
+    </div>
+
+    <div class="question">
+      <label for="residentCountriesSelect">In which country/countries do you currently reside or have you lived?</label>
+      <p class="small">Multiple choice is possible. On Windows, hold Ctrl while selecting multiple countries.</p>
+      <select id="residentCountriesSelect" multiple>
+        <option value="1">1 - Afghanistan</option>
+        <option value="2">2 - Albania</option>
+        <option value="3">3 - Algeria</option>
+        <option value="4">4 - Andorra</option>
+        <option value="5">5 - Angola</option>
+        <option value="6">6 - Antigua and Barbuda</option>
+        <option value="7">7 - Argentina</option>
+        <option value="8">8 - Armenia</option>
+        <option value="9">9 - Australia</option>
+        <option value="10">10 - Austria</option>
+        <option value="11">11 - Azerbaijan</option>
+        <option value="12">12 - Bahamas</option>
+        <option value="13">13 - Bahrain</option>
+        <option value="14">14 - Bangladesh</option>
+        <option value="15">15 - Barbados</option>
+        <option value="16">16 - Belarus</option>
+        <option value="17">17 - Belgium</option>
+        <option value="18">18 - Belize</option>
+        <option value="19">19 - Benin</option>
+        <option value="20">20 - Bhutan</option>
+        <option value="21">21 - Bolivia</option>
+        <option value="22">22 - Bosnia and Herzegovina</option>
+        <option value="23">23 - Botswana</option>
+        <option value="24">24 - Brazil</option>
+        <option value="25">25 - Brunei</option>
+        <option value="26">26 - Bulgaria</option>
+        <option value="27">27 - Burkina Faso</option>
+        <option value="28">28 - Burundi</option>
+        <option value="29">29 - Cabo Verde</option>
+        <option value="30">30 - Cambodia</option>
+        <option value="31">31 - Cameroon</option>
+        <option value="32">32 - Canada</option>
+        <option value="33">33 - Central African Republic</option>
+        <option value="34">34 - Chad</option>
+        <option value="35">35 - Chile</option>
+        <option value="36">36 - China</option>
+        <option value="37">37 - Colombia</option>
+        <option value="38">38 - Comoros</option>
+        <option value="39">39 - Congo</option>
+        <option value="40">40 - Costa Rica</option>
+        <option value="41">41 - Croatia</option>
+        <option value="42">42 - Cuba</option>
+        <option value="43">43 - Cyprus</option>
+        <option value="44">44 - Czech Republic</option>
+        <option value="45">45 - Denmark</option>
+        <option value="46">46 - Djibouti</option>
+        <option value="47">47 - Dominica</option>
+        <option value="48">48 - Dominican Republic</option>
+        <option value="49">49 - Ecuador</option>
+        <option value="50">50 - Egypt</option>
+        <option value="51">51 - El Salvador</option>
+        <option value="52">52 - Equatorial Guinea</option>
+        <option value="53">53 - Eritrea</option>
+        <option value="54">54 - Estonia</option>
+        <option value="55">55 - Eswatini</option>
+        <option value="56">56 - Ethiopia</option>
+        <option value="57">57 - Fiji</option>
+        <option value="58">58 - Finland</option>
+        <option value="59">59 - France</option>
+        <option value="60">60 - Gabon</option>
+        <option value="61">61 - Gambia</option>
+        <option value="62">62 - Georgia</option>
+        <option value="63">63 - Germany</option>
+        <option value="64">64 - Ghana</option>
+        <option value="65">65 - Greece</option>
+        <option value="66">66 - Grenada</option>
+        <option value="67">67 - Guatemala</option>
+        <option value="68">68 - Guinea</option>
+        <option value="69">69 - Guinea-Bissau</option>
+        <option value="70">70 - Guyana</option>
+        <option value="71">71 - Haiti</option>
+        <option value="72">72 - Honduras</option>
+        <option value="73">73 - Hungary</option>
+        <option value="74">74 - Iceland</option>
+        <option value="75">75 - India</option>
+        <option value="76">76 - Indonesia</option>
+        <option value="77">77 - Iran</option>
+        <option value="78">78 - Iraq</option>
+        <option value="79">79 - Ireland</option>
+        <option value="80">80 - Israel</option>
+        <option value="81">81 - Italy</option>
+        <option value="82">82 - Ivory Coast</option>
+        <option value="83">83 - Jamaica</option>
+        <option value="84">84 - Japan</option>
+        <option value="85">85 - Jordan</option>
+        <option value="86">86 - Kazakhstan</option>
+        <option value="87">87 - Kenya</option>
+        <option value="88">88 - Kiribati</option>
+        <option value="89">89 - Kuwait</option>
+        <option value="90">90 - Kyrgyzstan</option>
+        <option value="91">91 - Laos</option>
+        <option value="92">92 - Latvia</option>
+        <option value="93">93 - Lebanon</option>
+        <option value="94">94 - Lesotho</option>
+        <option value="95">95 - Liberia</option>
+        <option value="96">96 - Libya</option>
+        <option value="97">97 - Liechtenstein</option>
+        <option value="98">98 - Lithuania</option>
+        <option value="99">99 - Luxembourg</option>
+        <option value="100">100 - Madagascar</option>
+        <option value="101">101 - Malawi</option>
+        <option value="102">102 - Malaysia</option>
+        <option value="103">103 - Maldives</option>
+        <option value="104">104 - Mali</option>
+        <option value="105">105 - Malta</option>
+        <option value="106">106 - Marshall Islands</option>
+        <option value="107">107 - Mauritania</option>
+        <option value="108">108 - Mauritius</option>
+        <option value="109">109 - Mexico</option>
+        <option value="110">110 - Micronesia</option>
+        <option value="111">111 - Moldova</option>
+        <option value="112">112 - Monaco</option>
+        <option value="113">113 - Mongolia</option>
+        <option value="114">114 - Montenegro</option>
+        <option value="115">115 - Morocco</option>
+        <option value="116">116 - Mozambique</option>
+        <option value="117">117 - Myanmar</option>
+        <option value="118">118 - Namibia</option>
+        <option value="119">119 - Nauru</option>
+        <option value="120">120 - Nepal</option>
+        <option value="121">121 - Netherlands</option>
+        <option value="122">122 - New Zealand</option>
+        <option value="123">123 - Nicaragua</option>
+        <option value="124">124 - Niger</option>
+        <option value="125">125 - Nigeria</option>
+        <option value="126">126 - North Korea</option>
+        <option value="127">127 - North Macedonia</option>
+        <option value="128">128 - Norway</option>
+        <option value="129">129 - Oman</option>
+        <option value="130">130 - Pakistan</option>
+        <option value="131">131 - Palau</option>
+        <option value="132">132 - Panama</option>
+        <option value="133">133 - Papua New Guinea</option>
+        <option value="134">134 - Paraguay</option>
+        <option value="135">135 - Peru</option>
+        <option value="136">136 - Philippines</option>
+        <option value="137">137 - Poland</option>
+        <option value="138">138 - Portugal</option>
+        <option value="139">139 - Qatar</option>
+        <option value="140">140 - Romania</option>
+        <option value="141">141 - Russia</option>
+        <option value="142">142 - Rwanda</option>
+        <option value="143">143 - Saint Kitts and Nevis</option>
+        <option value="144">144 - Saint Lucia</option>
+        <option value="145">145 - Saint Vincent and the Grenadines</option>
+        <option value="146">146 - Samoa</option>
+        <option value="147">147 - San Marino</option>
+        <option value="148">148 - Sao Tome and Principe</option>
+        <option value="149">149 - Saudi Arabia</option>
+        <option value="150">150 - Senegal</option>
+        <option value="151">151 - Serbia</option>
+        <option value="152">152 - Seychelles</option>
+        <option value="153">153 - Sierra Leone</option>
+        <option value="154">154 - Singapore</option>
+        <option value="155">155 - Slovakia</option>
+        <option value="156">156 - Slovenia</option>
+        <option value="157">157 - Solomon Islands</option>
+        <option value="158">158 - Somalia</option>
+        <option value="159">159 - South Africa</option>
+        <option value="160">160 - South Korea</option>
+        <option value="161">161 - South Sudan</option>
+        <option value="162">162 - Spain</option>
+        <option value="163">163 - Sri Lanka</option>
+        <option value="164">164 - Sudan</option>
+        <option value="165">165 - Suriname</option>
+        <option value="166">166 - Sweden</option>
+        <option value="167">167 - Switzerland</option>
+        <option value="168">168 - Syria</option>
+        <option value="169">169 - Taiwan</option>
+        <option value="170">170 - Tajikistan</option>
+        <option value="171">171 - Tanzania</option>
+        <option value="172">172 - Thailand</option>
+        <option value="173">173 - Timor-Leste</option>
+        <option value="174">174 - Togo</option>
+        <option value="175">175 - Tonga</option>
+        <option value="176">176 - Trinidad and Tobago</option>
+        <option value="177">177 - Tunisia</option>
+        <option value="178">178 - Turkey</option>
+        <option value="179">179 - Turkmenistan</option>
+        <option value="180">180 - Tuvalu</option>
+        <option value="181">181 - Uganda</option>
+        <option value="182">182 - Ukraine</option>
+        <option value="183">183 - United Arab Emirates</option>
+        <option value="184">184 - United Kingdom</option>
+        <option value="185">185 - United States</option>
+        <option value="186">186 - Uruguay</option>
+        <option value="187">187 - Uzbekistan</option>
+        <option value="188">188 - Vanuatu</option>
+        <option value="189">189 - Venezuela</option>
+        <option value="190">190 - Vietnam</option>
+        <option value="191">191 - Yemen</option>
+        <option value="192">192 - Zambia</option>
+        <option value="193">193 - Zimbabwe</option>
+      </select>
+    </div>
+
+    <div class="question">
+      <label>Do you have children?</label>
+      <div class="checkbox-row">
+        <input type="checkbox" id="childUnder6">
+        <span>Children under 6 years old</span>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="childOver7">
+        <span>Children over 7 years old</span>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="childNone" onchange="handleChildrenSelection()">
+        <span>No children</span>
+      </div>
+    </div>
+
+    <div class="question">
+      <label for="cyclingSelect">How do you feel when cycling in an urban city?</label>
+      <select id="cyclingSelect">
+        <option value="">Please select</option>
+        <option>Very uncomfortable</option>
+        <option>Slightly uncomfortable</option>
+        <option>Neutral</option>
+        <option>Somewhat confident</option>
+        <option>Very confident</option>
+        <option>I don't know</option>
+      </select>
+    </div>
+
+    <div class="question">
+      <label>How many days per week do you use each micromobility mode, weather permitting?</label>
+      <table class="frequency-grid">
+        <tr><th>Mode</th><th>Summer</th><th>Winter</th></tr>
+        <tr>
+          <td>Conventional bike</td>
+          <td><select id="summerConventionalBike"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+          <td><select id="winterConventionalBike"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+        </tr>
+        <tr>
+          <td>E-bike</td>
+          <td><select id="summerEBike"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+          <td><select id="winterEBike"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+        </tr>
+        <tr>
+          <td>E-scooter</td>
+          <td><select id="summerEScooter"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+          <td><select id="winterEScooter"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+        </tr>
+        <tr>
+          <td>Cargo bike</td>
+          <td><select id="summerCargoBike"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+          <td><select id="winterCargoBike"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="question">
+      <label for="cyclistTypeSelect">How would you describe your cyclist type?</label>
+      <select id="cyclistTypeSelect">
+        <option value="">Please select</option>
+        <option>Strong and Fearless : I am comfortable cycling in all conditions, with or without dedicated bike infrastructure.</option>
+        <option>Enthused and Confident : I am comfortable cycling on roads with cars, but I prefer having dedicated cycling infrastructure.</option>
+        <option>Interested but Concerned : I am open to cycling, but only if there is high-quality infrastructure and I feel safe.</option>
+        <option>No Way, No How : I am not willing to cycle, even if good infrastructure is provided.</option>
+      </select>
+    </div>
+
+    <button onclick="saveDemographicsAndStart()">Start video task</button>
+  </div>
+
+  <div id="experimentScreen" class="hidden">
+    <div class="progress" id="progressText"></div>
+    <p><b>Question:</b> Which video looks more stressful / unsafe?</p>
+    <p class="small">
+      Press the button once. The Top video will play first and the Bottom video will start automatically.
+      Both are muted.
+    </p>
+
+    <div class="youtube-panel">
+      <div class="video-label" id="currentVideoLabel">Top video</div>
+      <div class="youtube-stage">
+        <div id="youtubePlayer"></div>
+        <div id="finishedOverlay">Both videos finished</div>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button id="playSequenceButton" onclick="playSequence()">Play video sequence</button>
+    </div>
+
+    <div class="buttons">
+      <button id="btnTop" onclick="submitAnswer('top')" disabled>Top video</button>
+      <button id="btnSame" onclick="submitAnswer('same')" disabled>Same</button>
+      <button id="btnBottom" onclick="submitAnswer('bottom')" disabled>Bottom video</button>
+    </div>
+
+    <p class="small" id="statusText"></p>
+  </div>
+
+  <div id="endScreen" class="hidden">
+    <h2>Finished. Thank you!</h2>
+    <p>All four test trials are complete.</p>
+    <div class="notice">
+      This GitHub-only test stores results in your browser, not on a central server.
+    </div>
+    <div class="downloads">
+      <button onclick="downloadPairwiseCSV()">Download pairwise CSV</button>
+      <button onclick="downloadDemographicCSV()">Download demographic CSV</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+// ---------------------------------------------------------------------
+// Four fake YouTube stimuli.
+// They are attached to four internal metadata rows so both pair rules
+// can be tested with only 4 uploaded videos.
+// ---------------------------------------------------------------------
+const VIDEOS = {
+  1: {
+    video_id: 1,
+    filename: "V001_test.mp4",
+    participant_id: "P3",
+    event_id: 1,
+    stress: "stress",
+    stress_detection: "both",
+    youtube_id: "DhWo1aD2nwI"
+  },
+  14: {
+    video_id: 14,
+    filename: "V002_test.mp4",
+    participant_id: "P21",
+    event_id: 1,
+    stress: "stress",
+    stress_detection: "objective",
+    youtube_id: "aY8CkSoGuFI"
+  },
+  32: {
+    video_id: 32,
+    filename: "V003_test.mp4",
+    participant_id: "P3",
+    event_id: 1,
+    stress: "normal",
+    stress_detection: "no",
+    youtube_id: "-U_5N9nShm0"
+  },
+  16: {
+    video_id: 16,
+    filename: "V004_test.mp4",
+    participant_id: "P21",
+    event_id: 3,
+    stress: "stress",
+    stress_detection: "subjective",
+    youtube_id: "T8iFOhN8FM4"
+  }
+};
+
+// Exactly 4 test pairs:
+// 2 same-participant / different-detection
+// 2 same/similar-situation
+const BASE_PAIRS = [
+  {
+    selection_source: "same_participant_different_detection",
+    situation_group_ids: [],
+    a: 1, b: 32
+  },
+  {
+    selection_source: "same_participant_different_detection",
+    situation_group_ids: [],
+    a: 14, b: 16
+  },
+  {
+    selection_source: "similar_situation",
+    situation_group_ids: [5],
+    a: 1, b: 14
+  },
+  {
+    selection_source: "similar_situation",
+    situation_group_ids: [4],
+    a: 32, b: 16
+  }
+];
+
+let participantId = "";
+let pairPlan = [];
+let currentTrial = 0;
+
+let youtubePlayer = null;
+let playerReady = false;
+let playbackStarted = false;
+let playbackPart = "idle"; // idle | top | bottom | finished
+let topEnded = false;
+let bottomEnded = false;
+let playbackStartPerf = null;
+let playbackEndPerf = null;
+
+function getOrCreateParticipantId() {
+  const params = new URLSearchParams(window.location.search);
+  let pid = (params.get("pid") || "").trim();
+
+  if (!pid) {
+    const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    const bytes = new Uint32Array(10);
+    crypto.getRandomValues(bytes);
+    pid = Array.from(bytes)
+      .map(n => alphabet[n % alphabet.length])
+      .join("");
+
+    const url = new URL(window.location.href);
+    url.searchParams.set("pid", pid);
+    history.replaceState(null, "", url.toString());
+  }
+
+  return pid;
+}
+
+function storageKey(name) {
+  return `videoSurveyTest_${participantId}_${name}`;
+}
+
+function hashString(str) {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function seededRandom(seed) {
+  let x = seed >>> 0;
+  return function() {
+    x += 0x6D2B79F5;
+    let t = x;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function shuffled(array, rand) {
+  const out = array.slice();
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+function makePairPlan(pid) {
+  const rand = seededRandom(hashString("PAIRPLAN_" + pid));
+  const ordered = shuffled(BASE_PAIRS, rand);
+
+  return ordered.map((pair, index) => {
+    const firstOnTop = rand() < 0.5;
+    const topId = firstOnTop ? pair.a : pair.b;
+    const bottomId = firstOnTop ? pair.b : pair.a;
+
+    return {
+      trial_index: index + 1,
+      selection_source: pair.selection_source,
+      situation_group_ids: pair.situation_group_ids,
+      top: VIDEOS[topId],
+      bottom: VIDEOS[bottomId]
+    };
+  });
+}
+
+function getPairPlan() {
+  const saved = localStorage.getItem(storageKey("pairPlan"));
+  if (saved) return JSON.parse(saved);
+
+  const plan = makePairPlan(participantId);
+  localStorage.setItem(storageKey("pairPlan"), JSON.stringify(plan));
+  return plan;
+}
+
+function getResponses() {
+  return JSON.parse(localStorage.getItem(storageKey("responses")) || "[]");
+}
+
+function saveResponses(rows) {
+  localStorage.setItem(storageKey("responses"), JSON.stringify(rows));
+}
+
+function demographicsSaved() {
+  return !!localStorage.getItem(storageKey("demographics"));
+}
+
+function completedTrialNumbers() {
+  return new Set(getResponses().map(r => Number(r.trial_index)));
+}
+
+function firstUnansweredTrialIndex() {
+  const completed = completedTrialNumbers();
+  for (let i = 0; i < pairPlan.length; i++) {
+    if (!completed.has(i + 1)) return i;
+  }
+  return pairPlan.length;
+}
+
+function showOnly(screenId) {
+  ["startScreen", "demographicScreen", "experimentScreen", "endScreen"]
+    .forEach(id => {
+      document.getElementById(id).classList.toggle("hidden", id !== screenId);
+    });
+}
+
+function startOrResume() {
+  pairPlan = getPairPlan();
+
+  if (!demographicsSaved()) {
+    showOnly("demographicScreen");
+    return;
+  }
+
+  currentTrial = firstUnansweredTrialIndex();
+
+  if (currentTrial >= pairPlan.length) {
+    showOnly("endScreen");
+    return;
+  }
+
+  showOnly("experimentScreen");
+  loadTrial();
+}
+
+function handleChildrenSelection() {
+  const none = document.getElementById("childNone");
+  if (none.checked) {
+    document.getElementById("childUnder6").checked = false;
+    document.getElementById("childOver7").checked = false;
+  }
+}
+
+function selectedMultiLabels(id) {
+  return Array.from(document.getElementById(id).selectedOptions)
+    .map(option => option.text.replace(/^\d+\s-\s/, ""));
+}
+
+function value(id) {
+  return document.getElementById(id).value;
+}
+
+function validateDemographics() {
+  const requiredIds = [
+    "sexSelect", "ageSelect", "nationalitySelect", "cyclingSelect",
+    "summerConventionalBike", "winterConventionalBike",
+    "summerEBike", "winterEBike",
+    "summerEScooter", "winterEScooter",
+    "summerCargoBike", "winterCargoBike",
+    "cyclistTypeSelect"
+  ];
+
+  for (const id of requiredIds) {
+    if (!value(id)) {
+      alert("Please answer all sociodemographic questions.");
+      return false;
+    }
+  }
+
+  if (selectedMultiLabels("residentCountriesSelect").length === 0) {
+    alert("Please select at least one country where you currently reside or have lived.");
+    return false;
+  }
+
+  const childrenSelected =
+    document.getElementById("childUnder6").checked ||
+    document.getElementById("childOver7").checked ||
+    document.getElementById("childNone").checked;
+
+  if (!childrenSelected) {
+    alert("Please answer the children question.");
+    return false;
+  }
+
+  return true;
+}
+
+function saveDemographicsAndStart() {
+  if (!validateDemographics()) return;
+
+  const children = [];
+  if (document.getElementById("childUnder6").checked) children.push("Children under 6 years old");
+  if (document.getElementById("childOver7").checked) children.push("Children over 7 years old");
+  if (document.getElementById("childNone").checked) children.push("No children");
+
+  const row = {
+    participant_id: participantId,
+    sex_label: value("sexSelect"),
+    age_label: value("ageSelect"),
+    nationality_label:
+      document.getElementById("nationalitySelect")
+        .selectedOptions[0].text.replace(/^\d+\s-\s/, ""),
+    resident_country_labels: selectedMultiLabels("residentCountriesSelect").join("|"),
+    children_labels: children.join("|"),
+    urban_cycling_feeling_label: value("cyclingSelect"),
+    summer_conventional_bike_label: value("summerConventionalBike"),
+    winter_conventional_bike_label: value("winterConventionalBike"),
+    summer_e_bike_label: value("summerEBike"),
+    winter_e_bike_label: value("winterEBike"),
+    summer_e_scooter_label: value("summerEScooter"),
+    winter_e_scooter_label: value("winterEScooter"),
+    summer_cargo_bike_label: value("summerCargoBike"),
+    winter_cargo_bike_label: value("winterCargoBike"),
+    cyclist_type_label: value("cyclistTypeSelect"),
+    demographic_answered_at: new Date().toISOString()
+  };
+
+  localStorage.setItem(storageKey("demographics"), JSON.stringify(row));
+
+  pairPlan = getPairPlan();
+  currentTrial = firstUnansweredTrialIndex();
+
+  showOnly("experimentScreen");
+  loadTrial();
+}
+
+function onYouTubeIframeAPIReady() {
+  youtubePlayer = new YT.Player("youtubePlayer", {
+    width: 960,
+    height: 540,
+    videoId: "DhWo1aD2nwI",
+    playerVars: {
+      autoplay: 0,
+      controls: 0,
+      disablekb: 1,
+      fs: 0,
+      playsinline: 1,
+      rel: 0,
+      origin: window.location.origin
+    },
+    events: {
+      onReady: onPlayerReady,
+      onStateChange: onPlayerStateChange,
+      onAutoplayBlocked: onAutoplayBlocked,
+      onError: onPlayerError
+    }
+  });
+}
+
+function onPlayerReady(event) {
+  playerReady = true;
+  event.target.mute();
+
+  try {
+    const iframe = event.target.getIframe();
+    iframe.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+    iframe.setAttribute(
+      "allow",
+      "autoplay; encrypted-media; picture-in-picture"
+    );
+  } catch (e) {
+    console.warn(e);
+  }
+
+  if (!document.getElementById("experimentScreen").classList.contains("hidden")) {
+    prepareTrialVideo();
+  }
+}
+
+function enableAnswerButtons(enabled) {
+  ["btnTop", "btnSame", "btnBottom"].forEach(id => {
+    document.getElementById(id).disabled = !enabled;
+  });
+}
+
+function resetPlaybackState() {
+  playbackStarted = false;
+  playbackPart = "idle";
+  topEnded = false;
+  bottomEnded = false;
+  playbackStartPerf = null;
+  playbackEndPerf = null;
+  enableAnswerButtons(false);
+  document.getElementById("finishedOverlay").style.display = "none";
+  document.getElementById("youtubePlayer").style.visibility = "visible";
+}
+
+function prepareTrialVideo() {
+  if (!playerReady || currentTrial >= pairPlan.length) return;
+  const pair = pairPlan[currentTrial];
+
+  youtubePlayer.mute();
+  youtubePlayer.cueVideoById(pair.top.youtube_id, 0);
+
+  document.getElementById("currentVideoLabel").innerText = "Top video";
+}
+
+function loadTrial() {
+  if (currentTrial >= pairPlan.length) {
+    showOnly("endScreen");
+    return;
+  }
+
+  resetPlaybackState();
+
+  document.getElementById("progressText").innerText =
+    `Trial ${currentTrial + 1} / ${pairPlan.length}`;
+
+  document.getElementById("statusText").innerText =
+    "Press “Play video sequence” to start.";
+
+  const btn = document.getElementById("playSequenceButton");
+  btn.disabled = false;
+  btn.innerText = "Play video sequence";
+
+  if (playerReady) {
+    prepareTrialVideo();
+  } else {
+    document.getElementById("statusText").innerText =
+      "Loading YouTube player...";
+  }
+}
+
+function playSequence() {
+  if (!playerReady) {
+    document.getElementById("statusText").innerText =
+      "YouTube player is still loading.";
+    return;
+  }
+
+  const pair = pairPlan[currentTrial];
+
+  // Fallback if browser blocks only the automatic Top -> Bottom transition.
+  if (playbackPart === "bottom" && topEnded && !bottomEnded) {
+    const btn = document.getElementById("playSequenceButton");
+    btn.disabled = true;
+    btn.innerText = "Playing...";
+
+    youtubePlayer.mute();
+    youtubePlayer.loadVideoById(pair.bottom.youtube_id, 0);
+    return;
+  }
+
+  resetPlaybackState();
+  playbackStarted = true;
+  playbackPart = "top";
+  playbackStartPerf = performance.now();
+
+  const btn = document.getElementById("playSequenceButton");
+  btn.disabled = true;
+  btn.innerText = "Playing...";
+
+  document.getElementById("currentVideoLabel").innerText = "Top video";
+  document.getElementById("statusText").innerText =
+    "Playing Top video... Bottom will start automatically.";
+
+  youtubePlayer.mute();
+  youtubePlayer.loadVideoById(pair.top.youtube_id, 0);
+}
+
+function onPlayerStateChange(event) {
+  if (event.data !== YT.PlayerState.ENDED || !playbackStarted) return;
+
+  const pair = pairPlan[currentTrial];
+
+  if (playbackPart === "top" && !topEnded) {
+    topEnded = true;
+    playbackPart = "bottom";
+
+    document.getElementById("currentVideoLabel").innerText = "Bottom video";
+    document.getElementById("statusText").innerText = "Playing Bottom video...";
+
+    youtubePlayer.mute();
+    youtubePlayer.loadVideoById(pair.bottom.youtube_id, 0);
+    return;
+  }
+
+  if (playbackPart === "bottom" && !bottomEnded) {
+    bottomEnded = true;
+    playbackPart = "finished";
+    playbackEndPerf = performance.now();
+
+    enableAnswerButtons(true);
+
+    document.getElementById("youtubePlayer").style.visibility = "hidden";
+    document.getElementById("finishedOverlay").style.display = "flex";
+
+    const btn = document.getElementById("playSequenceButton");
+    btn.disabled = false;
+    btn.innerText = "Replay video sequence";
+
+    document.getElementById("statusText").innerText =
+      "Both videos finished. Please choose Top video, Same, or Bottom video.";
+  }
+}
+
+function onAutoplayBlocked(event) {
+  if (playbackPart === "bottom" && topEnded && !bottomEnded) {
+    const btn = document.getElementById("playSequenceButton");
+    btn.disabled = false;
+    btn.innerText = "Continue Bottom video";
+    document.getElementById("statusText").innerText =
+      "Automatic Bottom playback was blocked. Press “Continue Bottom video”.";
+  }
+}
+
+function onPlayerError(event) {
+  const messages = {
+    2: "Invalid YouTube video ID or parameter.",
+    5: "YouTube HTML5 playback error.",
+    100: "Video unavailable or private.",
+    101: "Embedding is disabled for this video.",
+    150: "Embedding is disabled for this video.",
+    153: "YouTube did not receive the required Referer/client identity."
+  };
+
+  document.getElementById("statusText").innerText =
+    `YouTube error ${event.data}: ${messages[event.data] || "Unknown error."}`;
+
+  document.getElementById("playSequenceButton").disabled = false;
+}
+
+function submitAnswer(choice) {
+  if (!(topEnded && bottomEnded)) {
+    alert("Please watch both videos to the end.");
+    return;
+  }
+
+  const pair = pairPlan[currentTrial];
+  const rows = getResponses();
+
+  // Prevent duplicate trial rows.
+  if (rows.some(r => Number(r.trial_index) === currentTrial + 1)) {
+    currentTrial = firstUnansweredTrialIndex();
+    loadTrial();
+    return;
+  }
+
+  let chosenVideoId = "same";
+  if (choice === "top") chosenVideoId = pair.top.video_id;
+  if (choice === "bottom") chosenVideoId = pair.bottom.video_id;
+
+  const row = {
+    participant_id: participantId,
+    trial_index: currentTrial + 1,
+    selection_source: pair.selection_source,
+    situation_group_ids: pair.situation_group_ids.join("|"),
+
+    top_video_id: pair.top.video_id,
+    top_filename: pair.top.filename,
+    top_participant_id: pair.top.participant_id,
+    top_event_id: pair.top.event_id,
+    top_stress: pair.top.stress,
+    top_stress_detection: pair.top.stress_detection,
+
+    bottom_video_id: pair.bottom.video_id,
+    bottom_filename: pair.bottom.filename,
+    bottom_participant_id: pair.bottom.participant_id,
+    bottom_event_id: pair.bottom.event_id,
+    bottom_stress: pair.bottom.stress,
+    bottom_stress_detection: pair.bottom.stress_detection,
+
+    chosen_video_id: chosenVideoId,
+    answered_at: new Date().toISOString(),
+    watch_time_ms: Math.round(playbackEndPerf - playbackStartPerf),
+    response_time_after_video_end_ms:
+      Math.round(performance.now() - playbackEndPerf)
+  };
+
+  rows.push(row);
+  rows.sort((a, b) => Number(a.trial_index) - Number(b.trial_index));
+  saveResponses(rows);
+
+  currentTrial = firstUnansweredTrialIndex();
+
+  if (currentTrial >= pairPlan.length) {
+    showOnly("endScreen");
+  } else {
+    loadTrial();
+  }
+}
+
+function csvEscape(value) {
+  const s = value == null ? "" : String(value);
+  if (/[",\n]/.test(s)) {
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  return s;
+}
+
+function downloadCSV(filename, rows, columns) {
+  const header = columns.join(",");
+  const body = rows.map(row =>
+    columns.map(col => csvEscape(row[col])).join(",")
+  );
+  const csv = [header, ...body].join("\r\n");
+
+  const blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function downloadPairwiseCSV() {
+  const columns = [
+    "participant_id", "trial_index", "selection_source",
+    "situation_group_ids",
+    "top_video_id", "top_filename", "top_participant_id",
+    "top_event_id", "top_stress", "top_stress_detection",
+    "bottom_video_id", "bottom_filename", "bottom_participant_id",
+    "bottom_event_id", "bottom_stress", "bottom_stress_detection",
+    "chosen_video_id", "answered_at", "watch_time_ms",
+    "response_time_after_video_end_ms"
+  ];
+
+  downloadCSV(
+    `pairwise_responses_${participantId}.csv`,
+    getResponses(),
+    columns
+  );
+}
+
+function downloadDemographicCSV() {
+  const row = JSON.parse(
+    localStorage.getItem(storageKey("demographics")) || "{}"
+  );
+
+  const columns = [
+    "participant_id", "sex_label", "age_label", "nationality_label",
+    "resident_country_labels", "children_labels",
+    "urban_cycling_feeling_label",
+    "summer_conventional_bike_label", "winter_conventional_bike_label",
+    "summer_e_bike_label", "winter_e_bike_label",
+    "summer_e_scooter_label", "winter_e_scooter_label",
+    "summer_cargo_bike_label", "winter_cargo_bike_label",
+    "cyclist_type_label", "demographic_answered_at"
+  ];
+
+  downloadCSV(
+    `participant_demographics_${participantId}.csv`,
+    [row],
+    columns
+  );
+}
+
+participantId = getOrCreateParticipantId();
+document.getElementById("pidDisplay").innerText = participantId;
+pairPlan = getPairPlan();
+</script>
+</body>
+</html>
