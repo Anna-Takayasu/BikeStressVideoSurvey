@@ -673,6 +673,18 @@
     </div>
 
     <p class="small" id="statusText"></p>
+    <div style="margin-top:24px; text-align:center;">
+      <p class="small">
+        Need to stop now? You can save your completed answers and continue later on this device.
+      </p>
+    
+      <button onclick="submitPartialResult()"
+              style="font-size:14px;padding:8px 14px;">
+        Save partial result
+      </button>
+    
+      <p class="small" id="partialStatusText"></p>
+    </div>
   </div>
 
   <div id="endScreen" class="hidden">
@@ -1698,7 +1710,38 @@ function buildPrefilledMicrosoftFormUrl(code) {
 
   return null;
 }
+async function submitPartialResult() {
 
+  const completed = getResponses().length;
+
+  if (completed === 0) {
+    document.getElementById("partialStatusText").innerText =
+      "Please complete at least one video comparison before saving a partial result.";
+    return;
+  }
+
+  const code = await generateResultCode();
+
+  // Copy as backup
+  try {
+    await navigator.clipboard.writeText(code);
+  } catch (err) {
+    console.warn("Clipboard copy failed:", err);
+  }
+
+  const url = buildPrefilledMicrosoftFormUrl(code);
+
+  if (!url) {
+    document.getElementById("partialStatusText").innerText =
+      "Microsoft Forms could not be opened. The partial result code was copied.";
+    return;
+  }
+
+  document.getElementById("partialStatusText").innerText =
+    `Saving ${completed} completed trial(s). Submit the pre-filled result in Microsoft Forms, then you may return and continue later.`;
+
+  window.open(url, "_blank", "noopener,noreferrer");
+}
 async function copyAndOpenMicrosoftForm() {
   const code = await generateResultCode();
 
