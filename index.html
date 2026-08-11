@@ -695,10 +695,24 @@
     </div>
 
     <div class="buttons">
-      <button onclick="copyResultCode()">Copy result code</button>
-      <button onclick="copyAndOpenMicrosoftForm()">Submit result in Microsoft Forms</button>
+      <button id="submitFormsButton"
+              onclick="copyAndOpenMicrosoftForm()"
+              style="font-size:20px;font-weight:bold;padding:15px 28px;">
+        Submit result in Microsoft Forms
+      </button>
     </div>
-
+    
+    <div class="notice" style="margin-top:18px;">
+      <p class="small" style="margin:0 0 8px 0;">
+        If Microsoft Forms does not open, or if the submission fails, use the backup option below.
+      </p>
+    
+      <button onclick="copyResultCode()"
+              style="font-size:15px;padding:9px 16px;margin:0;">
+        Copy result code
+      </button>
+    </div>
+    
     <p class="small" id="formStatusText"></p>
   </div>
 
