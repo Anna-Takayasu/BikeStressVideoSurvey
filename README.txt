@@ -2,7 +2,7 @@
 
 Test URLs:
 - Base: https://anna-takayasu.github.io/VideoSurvey_test/
-- Fixed test participant: https://anna-takayasu.github.io/VideoSurvey_test/?pid=TEST0001
+- Fixed test participant: https://anna-takayasu.github.io/VideoSurvey_test/?pid=TEST0002
 
 This is a browser-only test:
 - demographics are stored in localStorage
