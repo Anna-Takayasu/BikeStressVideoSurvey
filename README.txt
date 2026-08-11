@@ -1,7 +1,5 @@
 # GitHub Video Survey Test
 
-Upload `index.html` to the root of your GitHub Pages repository.
-
 Test URLs:
 - Base: https://anna-takayasu.github.io/VideoSurvey_test/
 - Fixed test participant: https://anna-takayasu.github.io/VideoSurvey_test/?pid=TEST001
