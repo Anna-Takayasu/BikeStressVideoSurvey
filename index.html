@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Video Stress Pairwise Survey — GitHub Test</title>
+  <title>Video Stress Pairwise Survey — Encrypted Compact Result Code Test</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -26,7 +26,7 @@
     .progress { font-weight: bold; margin-bottom: 8px; }
     .question { margin: 20px 0; }
     label { display: block; font-weight: bold; margin-bottom: 7px; }
-    select, input {
+    select, input, textarea {
       font-size: 16px;
       padding: 8px;
       width: min(100%, 650px);
@@ -139,7 +139,7 @@
     <h2>Video comparison questionnaire — GitHub test</h2>
     <p class="small">
       Test participant ID: <b id="pidDisplay"></b><br>
-      This test saves progress only in this browser.
+      This test saves progress in this browser and produces one compact result code at the end.
     </p>
     <button onclick="startOrResume()">Start / Resume</button>
   </div>
@@ -678,19 +678,71 @@
   <div id="endScreen" class="hidden">
     <h2>Finished. Thank you!</h2>
     <p>All four test trials are complete.</p>
+
     <div class="notice">
-      This GitHub-only test stores results in your browser, not on a central server.
+      Your complete questionnaire result has been converted into one compact result code.
+      Please submit this code using the Microsoft Form.
     </div>
-    <div class="downloads">
-      <button onclick="downloadPairwiseCSV()">Download pairwise CSV</button>
-      <button onclick="downloadDemographicCSV()">Download demographic CSV</button>
+
+    <div class="question">
+      <label for="resultCodeBox">Result code</label>
+      <textarea id="resultCodeBox" readonly
+        style="width:100%;min-height:145px;font-family:monospace;font-size:13px;padding:10px;"></textarea>
+      <p class="small">
+        Characters: <span id="resultCodeLength">0</span>.
+        The demographic section is encrypted. The video/trial section remains readable by design.
+      </p>
     </div>
+
+    <div class="buttons">
+      <button onclick="copyResultCode()">Copy result code</button>
+      <button onclick="copyAndOpenMicrosoftForm()">Submit result in Microsoft Forms</button>
+    </div>
+
+    <p class="small" id="formStatusText"></p>
   </div>
 
 </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
+// ---------------------------------------------------------------------
+// MICROSOFT FORMS CONFIGURATION
+//
+// 1. Create one required Text question in Microsoft Forms:
+//       Survey result code
+//
+// 2. In Microsoft Forms choose:
+//       ... -> Get Pre-filled URL
+//    Enable pre-filled answers and enter exactly:
+//       RESULTCODEHERE
+//
+// 3. Copy that generated URL and paste it below.
+//
+// The questionnaire will replace RESULTCODEHERE with the real compact code.
+// ---------------------------------------------------------------------
+const MICROSOFT_FORM_PREFILLED_URL =
+  "PASTE_YOUR_MICROSOFT_FORMS_PREFILLED_URL_HERE";
+
+const MICROSOFT_FORM_PLACEHOLDER = "RESULTCODEHERE";
+
+// Public encryption key.
+// It is safe for this PUBLIC key to be visible in GitHub.
+// Keep the matching PRIVATE key offline and never upload it to GitHub.
+const DEMOGRAPHIC_RSA_PUBLIC_KEY_PEM = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp2FdAMEudRRudCPqXHEV
+1yvF/70STybOLGsam1zrL6wCK9+iravWx7l+XeFFUmQWFYqA2fHhmBwwTw+NMX7l
+2xLSqatKFnBdGIA2GKwqhiyUswcEaM3pdd6uNhj4Zw0lo8mrtopLIXqq0jnxc/E2
+6Vf3rjHLtJ9X+CyP4YX6v1AaDo8GG4J7WjpXQMBrWLQcKNwNTV9uPYYWxiAzegb9
+ccqj+wFOiLLinocaWCsOawC8wCP8KM2YSHVId1uFr2QQw7a/qSwaxVsU3ZJkG18h
+c5cYZE3BbektQWaOC8ZSHH53yAqVtLTKrw3TSA7m3DY/2h8xCyF/8hWF4psvkliN
+iwIDAQAB
+-----END PUBLIC KEY-----
+`;
+
+
+const COUNTRY_CODE_BY_LABEL = {"Afghanistan":1,"Albania":2,"Algeria":3,"Andorra":4,"Angola":5,"Antigua and Barbuda":6,"Argentina":7,"Armenia":8,"Australia":9,"Austria":10,"Azerbaijan":11,"Bahamas":12,"Bahrain":13,"Bangladesh":14,"Barbados":15,"Belarus":16,"Belgium":17,"Belize":18,"Benin":19,"Bhutan":20,"Bolivia":21,"Bosnia and Herzegovina":22,"Botswana":23,"Brazil":24,"Brunei":25,"Bulgaria":26,"Burkina Faso":27,"Burundi":28,"Cabo Verde":29,"Cambodia":30,"Cameroon":31,"Canada":32,"Central African Republic":33,"Chad":34,"Chile":35,"China":36,"Colombia":37,"Comoros":38,"Congo":39,"Costa Rica":40,"Croatia":41,"Cuba":42,"Cyprus":43,"Czech Republic":44,"Denmark":45,"Djibouti":46,"Dominica":47,"Dominican Republic":48,"Ecuador":49,"Egypt":50,"El Salvador":51,"Equatorial Guinea":52,"Eritrea":53,"Estonia":54,"Eswatini":55,"Ethiopia":56,"Fiji":57,"Finland":58,"France":59,"Gabon":60,"Gambia":61,"Georgia":62,"Germany":63,"Ghana":64,"Greece":65,"Grenada":66,"Guatemala":67,"Guinea":68,"Guinea-Bissau":69,"Guyana":70,"Haiti":71,"Honduras":72,"Hungary":73,"Iceland":74,"India":75,"Indonesia":76,"Iran":77,"Iraq":78,"Ireland":79,"Israel":80,"Italy":81,"Ivory Coast":82,"Jamaica":83,"Japan":84,"Jordan":85,"Kazakhstan":86,"Kenya":87,"Kiribati":88,"Kuwait":89,"Kyrgyzstan":90,"Laos":91,"Latvia":92,"Lebanon":93,"Lesotho":94,"Liberia":95,"Libya":96,"Liechtenstein":97,"Lithuania":98,"Luxembourg":99,"Madagascar":100,"Malawi":101,"Malaysia":102,"Maldives":103,"Mali":104,"Malta":105,"Marshall Islands":106,"Mauritania":107,"Mauritius":108,"Mexico":109,"Micronesia":110,"Moldova":111,"Monaco":112,"Mongolia":113,"Montenegro":114,"Morocco":115,"Mozambique":116,"Myanmar":117,"Namibia":118,"Nauru":119,"Nepal":120,"Netherlands":121,"New Zealand":122,"Nicaragua":123,"Niger":124,"Nigeria":125,"North Korea":126,"North Macedonia":127,"Norway":128,"Oman":129,"Pakistan":130,"Palau":131,"Panama":132,"Papua New Guinea":133,"Paraguay":134,"Peru":135,"Philippines":136,"Poland":137,"Portugal":138,"Qatar":139,"Romania":140,"Russia":141,"Rwanda":142,"Saint Kitts and Nevis":143,"Saint Lucia":144,"Saint Vincent and the Grenadines":145,"Samoa":146,"San Marino":147,"Sao Tome and Principe":148,"Saudi Arabia":149,"Senegal":150,"Serbia":151,"Seychelles":152,"Sierra Leone":153,"Singapore":154,"Slovakia":155,"Slovenia":156,"Solomon Islands":157,"Somalia":158,"South Africa":159,"South Korea":160,"South Sudan":161,"Spain":162,"Sri Lanka":163,"Sudan":164,"Suriname":165,"Sweden":166,"Switzerland":167,"Syria":168,"Taiwan":169,"Tajikistan":170,"Tanzania":171,"Thailand":172,"Timor-Leste":173,"Togo":174,"Tonga":175,"Trinidad and Tobago":176,"Tunisia":177,"Turkey":178,"Turkmenistan":179,"Tuvalu":180,"Uganda":181,"Ukraine":182,"United Arab Emirates":183,"United Kingdom":184,"United States":185,"Uruguay":186,"Uzbekistan":187,"Vanuatu":188,"Venezuela":189,"Vietnam":190,"Yemen":191,"Zambia":192,"Zimbabwe":193};
+
 // ---------------------------------------------------------------------
 // Four fake YouTube stimuli.
 // They are attached to four internal metadata rows so both pair rules
@@ -884,6 +936,10 @@ function showOnly(screenId) {
     .forEach(id => {
       document.getElementById(id).classList.toggle("hidden", id !== screenId);
     });
+
+  if (screenId === "endScreen") {
+    renderResultCode();
+  }
 }
 
 function startOrResume() {
@@ -957,6 +1013,48 @@ function validateDemographics() {
   return true;
 }
 
+
+function selectedIndexCode(id) {
+  // All single-choice select boxes have "Please select" at index 0,
+  // therefore selectedIndex directly gives our stable 1-based answer code.
+  return document.getElementById(id).selectedIndex;
+}
+
+function selectedCountryCodes(id) {
+  return Array.from(document.getElementById(id).selectedOptions)
+    .map(option => Number(option.value))
+    .filter(Number.isFinite)
+    .sort((a, b) => a - b);
+}
+
+function buildDemographicCodes() {
+  const children = [];
+  if (document.getElementById("childUnder6").checked) children.push(1);
+  if (document.getElementById("childOver7").checked) children.push(2);
+  if (document.getElementById("childNone").checked) children.push(3);
+
+  return {
+    sex: selectedIndexCode("sexSelect"),
+    age: selectedIndexCode("ageSelect"),
+    nationality: Number(value("nationalitySelect")),
+    resident_countries: selectedCountryCodes("residentCountriesSelect"),
+    children: children,
+    urban_cycling_feeling: selectedIndexCode("cyclingSelect"),
+
+    summer_conventional_bike: selectedIndexCode("summerConventionalBike"),
+    winter_conventional_bike: selectedIndexCode("winterConventionalBike"),
+    summer_e_bike: selectedIndexCode("summerEBike"),
+    winter_e_bike: selectedIndexCode("winterEBike"),
+    summer_e_scooter: selectedIndexCode("summerEScooter"),
+    winter_e_scooter: selectedIndexCode("winterEScooter"),
+    summer_cargo_bike: selectedIndexCode("summerCargoBike"),
+    winter_cargo_bike: selectedIndexCode("winterCargoBike"),
+
+    cyclist_type: selectedIndexCode("cyclistTypeSelect"),
+    demographic_answered_epoch_s: Math.floor(Date.now() / 1000)
+  };
+}
+
 function saveDemographicsAndStart() {
   if (!validateDemographics()) return;
 
@@ -988,6 +1086,10 @@ function saveDemographicsAndStart() {
   };
 
   localStorage.setItem(storageKey("demographics"), JSON.stringify(row));
+  localStorage.setItem(
+    storageKey("demographicCodes"),
+    JSON.stringify(buildDemographicCodes())
+  );
 
   pairPlan = getPairPlan();
   currentTrial = firstUnansweredTrialIndex();
@@ -1252,73 +1354,360 @@ function submitAnswer(choice) {
   }
 }
 
-function csvEscape(value) {
-  const s = value == null ? "" : String(value);
-  if (/[",\n]/.test(s)) {
-    return '"' + s.replace(/"/g, '""') + '"';
-  }
-  return s;
+
+// =====================================================================
+// COMPACT RESULT CODE
+//
+// Format:
+//   PARTICIPANT_ID|ENCRYPTED_DEMOGRAPHICS|TRIALS
+//
+// The demographic section is hybrid-encrypted in the browser:
+//   - fresh random AES-256-GCM key for each result
+//   - demographic payload encrypted with AES-GCM
+//   - AES key encrypted with the embedded RSA-OAEP public key
+//
+// The matching RSA PRIVATE key is NOT in GitHub and is required to decode.
+//
+// Encrypted demographic segment:
+//   <RSA_ENCRYPTED_AES_KEY>.<IV>.<AES_GCM_CIPHERTEXT>
+//
+// Video/trial section remains intentionally readable:
+//   SOURCE,TOP_ID,BOTTOM_ID,WINNER_ID,RESPONSE_MS,WATCH_MS,ANSWER_EPOCH
+//
+// SOURCE:
+//   1 = same participant / different detection
+//   2 = similar situation
+//
+// WINNER_ID:
+//   0 = Same
+//   otherwise the winning VideoID
+//
+// Trial order itself is trial_index.
+// =====================================================================
+
+function unixSecondsFromIso(isoString) {
+  const ms = Date.parse(isoString);
+  return Number.isFinite(ms) ? Math.floor(ms / 1000) : 0;
 }
 
-function downloadCSV(filename, rows, columns) {
-  const header = columns.join(",");
-  const body = rows.map(row =>
-    columns.map(col => csvEscape(row[col])).join(",")
-  );
-  const csv = [header, ...body].join("\r\n");
-
-  const blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+function sourceCode(selectionSource) {
+  if (selectionSource === "same_participant_different_detection") return 1;
+  if (selectionSource === "similar_situation") return 2;
+  return 0;
 }
 
-function downloadPairwiseCSV() {
-  const columns = [
-    "participant_id", "trial_index", "selection_source",
-    "situation_group_ids",
-    "top_video_id", "top_filename", "top_participant_id",
-    "top_event_id", "top_stress", "top_stress_detection",
-    "bottom_video_id", "bottom_filename", "bottom_participant_id",
-    "bottom_event_id", "bottom_stress", "bottom_stress_detection",
-    "chosen_video_id", "answered_at", "watch_time_ms",
-    "response_time_after_video_end_ms"
-  ];
-
-  downloadCSV(
-    `pairwise_responses_${participantId}.csv`,
-    getResponses(),
-    columns
-  );
-}
-
-function downloadDemographicCSV() {
+function demographicCodesFromSavedLabels() {
+  // Fallback only for a browser session created with the older page.
   const row = JSON.parse(
     localStorage.getItem(storageKey("demographics")) || "{}"
   );
 
-  const columns = [
-    "participant_id", "sex_label", "age_label", "nationality_label",
-    "resident_country_labels", "children_labels",
-    "urban_cycling_feeling_label",
-    "summer_conventional_bike_label", "winter_conventional_bike_label",
-    "summer_e_bike_label", "winter_e_bike_label",
-    "summer_e_scooter_label", "winter_e_scooter_label",
-    "summer_cargo_bike_label", "winter_cargo_bike_label",
-    "cyclist_type_label", "demographic_answered_at"
+  const sex = ["Male", "Female", "Prefer not to say", "Other"];
+  const age = ["<20", "21-25", "26-30", "31-35", "36-40",
+               "41-45", "46-50", "51-55", "56-60", ">61"];
+  const cycling = [
+    "Very uncomfortable", "Slightly uncomfortable", "Neutral",
+    "Somewhat confident", "Very confident", "I don't know"
+  ];
+  const freq = [
+    "Never", "Less than one day in a week", "One or two days in a week",
+    "Three to five days in a week", "Almost every day"
+  ];
+  const cyclist = [
+    "Strong and Fearless : I am comfortable cycling in all conditions, with or without dedicated bike infrastructure.",
+    "Enthused and Confident : I am comfortable cycling on roads with cars, but I prefer having dedicated cycling infrastructure.",
+    "Interested but Concerned : I am open to cycling, but only if there is high-quality infrastructure and I feel safe.",
+    "No Way, No How : I am not willing to cycle, even if good infrastructure is provided."
   ];
 
-  downloadCSV(
-    `participant_demographics_${participantId}.csv`,
-    [row],
-    columns
+  function oneBasedIndex(arr, label) {
+    const i = arr.indexOf(label);
+    return i >= 0 ? i + 1 : 0;
+  }
+
+  return {
+    sex: oneBasedIndex(sex, row.sex_label),
+    age: oneBasedIndex(age, row.age_label),
+    nationality: 0,
+    resident_countries: [],
+    children: [],
+    urban_cycling_feeling: oneBasedIndex(cycling, row.urban_cycling_feeling_label),
+    summer_conventional_bike: oneBasedIndex(freq, row.summer_conventional_bike_label),
+    winter_conventional_bike: oneBasedIndex(freq, row.winter_conventional_bike_label),
+    summer_e_bike: oneBasedIndex(freq, row.summer_e_bike_label),
+    winter_e_bike: oneBasedIndex(freq, row.winter_e_bike_label),
+    summer_e_scooter: oneBasedIndex(freq, row.summer_e_scooter_label),
+    winter_e_scooter: oneBasedIndex(freq, row.winter_e_scooter_label),
+    summer_cargo_bike: oneBasedIndex(freq, row.summer_cargo_bike_label),
+    winter_cargo_bike: oneBasedIndex(freq, row.winter_cargo_bike_label),
+    cyclist_type: oneBasedIndex(cyclist, row.cyclist_type_label),
+    demographic_answered_epoch_s: unixSecondsFromIso(row.demographic_answered_at)
+  };
+}
+
+function getDemographicCodes() {
+  const saved = localStorage.getItem(storageKey("demographicCodes"));
+  if (saved) return JSON.parse(saved);
+  return demographicCodesFromSavedLabels();
+}
+
+function demographicPlaintext() {
+  const d = getDemographicCodes();
+
+  // Deliberately NOT questionnaire order.
+  // This order is an internal  packing order only.
+  //
+  //  1 nationality
+  //  2 cyclist type
+  //  3 resident countries (multi)
+  //  4 winter e-scooter
+  //  5 age
+  //  6 children (multi)
+  //  7 summer conventional bike
+  //  8 sex
+  //  9 winter cargo bike
+  // 10 urban cycling feeling
+  // 11 summer e-bike
+  // 12 winter conventional bike
+  // 13 summer cargo bike
+  // 14 winter e-bike
+  // 15 summer e-scooter
+  // 16 demographic timestamp
+  return [
+    d.nationality,
+    d.cyclist_type,
+    (d.resident_countries || []).join("+"),
+    d.winter_e_scooter,
+    d.age,
+    (d.children || []).join("+"),
+    d.summer_conventional_bike,
+    d.sex,
+    d.winter_cargo_bike,
+    d.urban_cycling_feeling,
+    d.summer_e_bike,
+    d.winter_conventional_bike,
+    d.summer_cargo_bike,
+    d.winter_e_bike,
+    d.summer_e_scooter,
+    d.demographic_answered_epoch_s || 0
+  ].join("/");
+}
+
+function pemToArrayBuffer(pem) {
+  const b64 = pem
+    .replace(/-----BEGIN PUBLIC KEY-----/g, "")
+    .replace(/-----END PUBLIC KEY-----/g, "")
+    .replace(/\s+/g, "");
+
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+
+  return bytes.buffer;
+}
+
+function bytesToBase64Url(bytes) {
+  let binary = "";
+  const arr = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+
+  for (let i = 0; i < arr.length; i++) {
+    binary += String.fromCharCode(arr[i]);
+  }
+
+  return btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
+}
+
+async function importDemographicPublicKey() {
+  return crypto.subtle.importKey(
+    "spki",
+    pemToArrayBuffer(DEMOGRAPHIC_RSA_PUBLIC_KEY_PEM),
+    {
+      name: "RSA-OAEP",
+      hash: "SHA-256"
+    },
+    false,
+    ["encrypt"]
   );
 }
+
+async function encryptDemographics() {
+  const plaintextBytes = new TextEncoder().encode(demographicPlaintext());
+
+  // Random AES-256 key for this participant result.
+  const aesKey = await crypto.subtle.generateKey(
+    {
+      name: "AES-GCM",
+      length: 256
+    },
+    true,
+    ["encrypt"]
+  );
+
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+
+  const ciphertext = await crypto.subtle.encrypt(
+    {
+      name: "AES-GCM",
+      iv: iv
+    },
+    aesKey,
+    plaintextBytes
+  );
+
+  const rawAesKey = await crypto.subtle.exportKey("raw", aesKey);
+  const rsaPublicKey = await importDemographicPublicKey();
+
+  const encryptedAesKey = await crypto.subtle.encrypt(
+    {
+      name: "RSA-OAEP"
+    },
+    rsaPublicKey,
+    rawAesKey
+  );
+
+  return [
+    bytesToBase64Url(encryptedAesKey),
+    bytesToBase64Url(iv),
+    bytesToBase64Url(ciphertext)
+  ].join(".");
+}
+
+async function generateResultCode() {
+  // Reuse the already-generated encrypted demographic segment for this PID
+  // so reopening the completed page gives the exact same final code.
+  let encryptedDemo = localStorage.getItem(
+    storageKey("encryptedDemographics")
+  );
+
+  if (!encryptedDemo) {
+    encryptedDemo = await encryptDemographics();
+    localStorage.setItem(
+      storageKey("encryptedDemographics"),
+      encryptedDemo
+    );
+  }
+
+  const responses = getResponses()
+    .slice()
+    .sort((a, b) => Number(a.trial_index) - Number(b.trial_index));
+
+  const trialFields = responses.map(row => {
+    const winner =
+      row.chosen_video_id === "same" ? 0 : Number(row.chosen_video_id);
+
+    return [
+      sourceCode(row.selection_source),
+      Number(row.top_video_id),
+      Number(row.bottom_video_id),
+      winner,
+      Number(row.response_time_after_video_end_ms),
+      Number(row.watch_time_ms),
+      unixSecondsFromIso(row.answered_at)
+    ].join(",");
+  });
+
+  return [
+    participantId,
+    encryptedDemo,
+    trialFields.join(";")
+  ].join("|");
+}
+
+async function renderResultCode() {
+  const box = document.getElementById("resultCodeBox");
+  if (!box) return;
+
+  box.value = "Generating encrypted result code...";
+  document.getElementById("formStatusText").innerText =
+    "Encrypting demographic responses...";
+
+  try {
+    const code = await generateResultCode();
+    box.value = code;
+    document.getElementById("resultCodeLength").innerText = code.length;
+
+    if (code.length > 3900) {
+      document.getElementById("formStatusText").innerText =
+        "Warning: result code is close to or above the Microsoft Forms single-answer limit.";
+    } else {
+      document.getElementById("formStatusText").innerText =
+        "Encrypted result code is ready to submit.";
+    }
+  } catch (err) {
+    console.error(err);
+    box.value = "";
+    document.getElementById("formStatusText").innerText =
+      "Could not encrypt the demographic result. Please reload the page.";
+  }
+}
+
+async function copyResultCode() {
+  const code = await generateResultCode();
+
+  try {
+    await navigator.clipboard.writeText(code);
+    document.getElementById("formStatusText").innerText =
+      "Result code copied.";
+  } catch (err) {
+    const box = document.getElementById("resultCodeBox");
+    box.value = code;
+    box.focus();
+    box.select();
+    document.execCommand("copy");
+    document.getElementById("formStatusText").innerText =
+      "Result code copied.";
+  }
+}
+
+function buildPrefilledMicrosoftFormUrl(code) {
+  const template = MICROSOFT_FORM_PREFILLED_URL.trim();
+
+  if (!/^https?:\/\//i.test(template)) return null;
+
+  const encodedPlaceholder = encodeURIComponent(MICROSOFT_FORM_PLACEHOLDER);
+  const encodedCode = encodeURIComponent(code);
+
+  if (template.includes(encodedPlaceholder)) {
+    return template.split(encodedPlaceholder).join(encodedCode);
+  }
+
+  if (template.includes(MICROSOFT_FORM_PLACEHOLDER)) {
+    return template.split(MICROSOFT_FORM_PLACEHOLDER).join(encodedCode);
+  }
+
+  return null;
+}
+
+async function copyAndOpenMicrosoftForm() {
+  const code = await generateResultCode();
+
+  // Always copy as fallback.
+  try {
+    await navigator.clipboard.writeText(code);
+  } catch (err) {
+    console.warn("Clipboard copy failed:", err);
+  }
+
+  const url = buildPrefilledMicrosoftFormUrl(code);
+
+  if (!url) {
+    document.getElementById("formStatusText").innerText =
+      "Microsoft Forms URL is not configured yet. The result code was copied; paste it manually into the Form.";
+    return;
+  }
+
+  document.getElementById("formStatusText").innerText =
+    "Opening Microsoft Forms with the encrypted result code pre-filled. Please press Submit there.";
+
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+
 
 participantId = getOrCreateParticipantId();
 document.getElementById("pidDisplay").innerText = participantId;
