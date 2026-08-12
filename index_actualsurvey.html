@@ -1,0 +1,2457 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Video Stress Pairwise Survey — Encrypted Compact Result Code Test</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1050px;
+      margin: 28px auto;
+      padding: 0 18px 50px;
+      background: #f7f7f7;
+      color: #222;
+    }
+    .card {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    }
+    .hidden { display: none !important; }
+    .small { color: #666; font-size: 14px; line-height: 1.45; }
+    .progress { font-weight: bold; margin-bottom: 8px; }
+    .question { margin: 20px 0; }
+    label { display: block; font-weight: bold; margin-bottom: 7px; }
+    select, input, textarea {
+      font-size: 16px;
+      padding: 8px;
+      width: min(100%, 650px);
+    }
+    select[multiple] { min-height: 180px; }
+    button {
+      font-size: 18px;
+      padding: 12px 22px;
+      margin: 8px;
+      cursor: pointer;
+      border-radius: 7px;
+      border: 1px solid #999;
+      background: #fff;
+    }
+    button:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+    .buttons { text-align: center; margin-top: 18px; }
+    .checkbox-row {
+      margin: 7px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .checkbox-row input {
+      width: auto;
+      margin: 0;
+    }
+    .frequency-grid {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+    .frequency-grid th, .frequency-grid td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      vertical-align: top;
+    }
+    .frequency-grid th {
+      background: #f2f2f2;
+      text-align: left;
+    }
+    .frequency-grid select {
+      width: 100%;
+      font-size: 15px;
+    }
+    .youtube-panel {
+      background: #111;
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 16px;
+    }
+    .video-label {
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 0 0 8px 4px;
+    }
+    .youtube-stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      min-height: 270px;
+      max-height: 540px;
+      background: black;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+    #youtubePlayer {
+      width: 100%;
+      height: 100%;
+      background: black;
+    }
+    #youtubePlayer iframe {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+    #finishedOverlay {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+      color: white;
+      font-size: 22px;
+      font-weight: bold;
+      z-index: 5;
+    }
+    .notice {
+      background: #eef5ff;
+      padding: 12px 14px;
+      border-radius: 8px;
+      margin: 12px 0;
+    }
+    .downloads {
+      margin-top: 20px;
+      padding: 16px;
+      background: #f5f5f5;
+      border-radius: 9px;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <div id="startScreen">
+    <h2>Video comparison questionnaire</h2>
+    <p class="small">
+      Participant ID: <b id="pidDisplay"></b><br>
+      Progress is saved in this browser. Please use the same device/browser if you continue later.
+    </p>
+    <button id="startResumeButton" onclick="startOrResume()" disabled>Loading videos...</button>
+    <p class="small" id="setupStatus"></p>
+  </div>
+
+  <div id="demographicScreen" class="hidden">
+    <h2>Sociodemographic questionnaire</h2>
+    <p class="small">Please answer the following questions before the video comparison task.</p>
+
+    <div class="question">
+      <label for="sexSelect">What is your biological sex?</label>
+      <select id="sexSelect">
+        <option value="">Please select</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Prefer not to say</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="question">
+      <label for="ageSelect">What is your age?</label>
+      <select id="ageSelect">
+        <option value="">Please select</option>
+        <option>&lt;20</option>
+        <option>21-25</option>
+        <option>26-30</option>
+        <option>31-35</option>
+        <option>36-40</option>
+        <option>41-45</option>
+        <option>46-50</option>
+        <option>51-55</option>
+        <option>56-60</option>
+        <option>&gt;61</option>
+      </select>
+    </div>
+
+    <div class="question">
+      <label for="nationalitySelect">What is your nationality?</label>
+      <select id="nationalitySelect">
+        <option value="">Please select</option>
+        <option value="1">1 - Afghanistan</option>
+        <option value="2">2 - Albania</option>
+        <option value="3">3 - Algeria</option>
+        <option value="4">4 - Andorra</option>
+        <option value="5">5 - Angola</option>
+        <option value="6">6 - Antigua and Barbuda</option>
+        <option value="7">7 - Argentina</option>
+        <option value="8">8 - Armenia</option>
+        <option value="9">9 - Australia</option>
+        <option value="10">10 - Austria</option>
+        <option value="11">11 - Azerbaijan</option>
+        <option value="12">12 - Bahamas</option>
+        <option value="13">13 - Bahrain</option>
+        <option value="14">14 - Bangladesh</option>
+        <option value="15">15 - Barbados</option>
+        <option value="16">16 - Belarus</option>
+        <option value="17">17 - Belgium</option>
+        <option value="18">18 - Belize</option>
+        <option value="19">19 - Benin</option>
+        <option value="20">20 - Bhutan</option>
+        <option value="21">21 - Bolivia</option>
+        <option value="22">22 - Bosnia and Herzegovina</option>
+        <option value="23">23 - Botswana</option>
+        <option value="24">24 - Brazil</option>
+        <option value="25">25 - Brunei</option>
+        <option value="26">26 - Bulgaria</option>
+        <option value="27">27 - Burkina Faso</option>
+        <option value="28">28 - Burundi</option>
+        <option value="29">29 - Cabo Verde</option>
+        <option value="30">30 - Cambodia</option>
+        <option value="31">31 - Cameroon</option>
+        <option value="32">32 - Canada</option>
+        <option value="33">33 - Central African Republic</option>
+        <option value="34">34 - Chad</option>
+        <option value="35">35 - Chile</option>
+        <option value="36">36 - China</option>
+        <option value="37">37 - Colombia</option>
+        <option value="38">38 - Comoros</option>
+        <option value="39">39 - Congo</option>
+        <option value="40">40 - Costa Rica</option>
+        <option value="41">41 - Croatia</option>
+        <option value="42">42 - Cuba</option>
+        <option value="43">43 - Cyprus</option>
+        <option value="44">44 - Czech Republic</option>
+        <option value="45">45 - Denmark</option>
+        <option value="46">46 - Djibouti</option>
+        <option value="47">47 - Dominica</option>
+        <option value="48">48 - Dominican Republic</option>
+        <option value="49">49 - Ecuador</option>
+        <option value="50">50 - Egypt</option>
+        <option value="51">51 - El Salvador</option>
+        <option value="52">52 - Equatorial Guinea</option>
+        <option value="53">53 - Eritrea</option>
+        <option value="54">54 - Estonia</option>
+        <option value="55">55 - Eswatini</option>
+        <option value="56">56 - Ethiopia</option>
+        <option value="57">57 - Fiji</option>
+        <option value="58">58 - Finland</option>
+        <option value="59">59 - France</option>
+        <option value="60">60 - Gabon</option>
+        <option value="61">61 - Gambia</option>
+        <option value="62">62 - Georgia</option>
+        <option value="63">63 - Germany</option>
+        <option value="64">64 - Ghana</option>
+        <option value="65">65 - Greece</option>
+        <option value="66">66 - Grenada</option>
+        <option value="67">67 - Guatemala</option>
+        <option value="68">68 - Guinea</option>
+        <option value="69">69 - Guinea-Bissau</option>
+        <option value="70">70 - Guyana</option>
+        <option value="71">71 - Haiti</option>
+        <option value="72">72 - Honduras</option>
+        <option value="73">73 - Hungary</option>
+        <option value="74">74 - Iceland</option>
+        <option value="75">75 - India</option>
+        <option value="76">76 - Indonesia</option>
+        <option value="77">77 - Iran</option>
+        <option value="78">78 - Iraq</option>
+        <option value="79">79 - Ireland</option>
+        <option value="80">80 - Israel</option>
+        <option value="81">81 - Italy</option>
+        <option value="82">82 - Ivory Coast</option>
+        <option value="83">83 - Jamaica</option>
+        <option value="84">84 - Japan</option>
+        <option value="85">85 - Jordan</option>
+        <option value="86">86 - Kazakhstan</option>
+        <option value="87">87 - Kenya</option>
+        <option value="88">88 - Kiribati</option>
+        <option value="89">89 - Kuwait</option>
+        <option value="90">90 - Kyrgyzstan</option>
+        <option value="91">91 - Laos</option>
+        <option value="92">92 - Latvia</option>
+        <option value="93">93 - Lebanon</option>
+        <option value="94">94 - Lesotho</option>
+        <option value="95">95 - Liberia</option>
+        <option value="96">96 - Libya</option>
+        <option value="97">97 - Liechtenstein</option>
+        <option value="98">98 - Lithuania</option>
+        <option value="99">99 - Luxembourg</option>
+        <option value="100">100 - Madagascar</option>
+        <option value="101">101 - Malawi</option>
+        <option value="102">102 - Malaysia</option>
+        <option value="103">103 - Maldives</option>
+        <option value="104">104 - Mali</option>
+        <option value="105">105 - Malta</option>
+        <option value="106">106 - Marshall Islands</option>
+        <option value="107">107 - Mauritania</option>
+        <option value="108">108 - Mauritius</option>
+        <option value="109">109 - Mexico</option>
+        <option value="110">110 - Micronesia</option>
+        <option value="111">111 - Moldova</option>
+        <option value="112">112 - Monaco</option>
+        <option value="113">113 - Mongolia</option>
+        <option value="114">114 - Montenegro</option>
+        <option value="115">115 - Morocco</option>
+        <option value="116">116 - Mozambique</option>
+        <option value="117">117 - Myanmar</option>
+        <option value="118">118 - Namibia</option>
+        <option value="119">119 - Nauru</option>
+        <option value="120">120 - Nepal</option>
+        <option value="121">121 - Netherlands</option>
+        <option value="122">122 - New Zealand</option>
+        <option value="123">123 - Nicaragua</option>
+        <option value="124">124 - Niger</option>
+        <option value="125">125 - Nigeria</option>
+        <option value="126">126 - North Korea</option>
+        <option value="127">127 - North Macedonia</option>
+        <option value="128">128 - Norway</option>
+        <option value="129">129 - Oman</option>
+        <option value="130">130 - Pakistan</option>
+        <option value="131">131 - Palau</option>
+        <option value="132">132 - Panama</option>
+        <option value="133">133 - Papua New Guinea</option>
+        <option value="134">134 - Paraguay</option>
+        <option value="135">135 - Peru</option>
+        <option value="136">136 - Philippines</option>
+        <option value="137">137 - Poland</option>
+        <option value="138">138 - Portugal</option>
+        <option value="139">139 - Qatar</option>
+        <option value="140">140 - Romania</option>
+        <option value="141">141 - Russia</option>
+        <option value="142">142 - Rwanda</option>
+        <option value="143">143 - Saint Kitts and Nevis</option>
+        <option value="144">144 - Saint Lucia</option>
+        <option value="145">145 - Saint Vincent and the Grenadines</option>
+        <option value="146">146 - Samoa</option>
+        <option value="147">147 - San Marino</option>
+        <option value="148">148 - Sao Tome and Principe</option>
+        <option value="149">149 - Saudi Arabia</option>
+        <option value="150">150 - Senegal</option>
+        <option value="151">151 - Serbia</option>
+        <option value="152">152 - Seychelles</option>
+        <option value="153">153 - Sierra Leone</option>
+        <option value="154">154 - Singapore</option>
+        <option value="155">155 - Slovakia</option>
+        <option value="156">156 - Slovenia</option>
+        <option value="157">157 - Solomon Islands</option>
+        <option value="158">158 - Somalia</option>
+        <option value="159">159 - South Africa</option>
+        <option value="160">160 - South Korea</option>
+        <option value="161">161 - South Sudan</option>
+        <option value="162">162 - Spain</option>
+        <option value="163">163 - Sri Lanka</option>
+        <option value="164">164 - Sudan</option>
+        <option value="165">165 - Suriname</option>
+        <option value="166">166 - Sweden</option>
+        <option value="167">167 - Switzerland</option>
+        <option value="168">168 - Syria</option>
+        <option value="169">169 - Taiwan</option>
+        <option value="170">170 - Tajikistan</option>
+        <option value="171">171 - Tanzania</option>
+        <option value="172">172 - Thailand</option>
+        <option value="173">173 - Timor-Leste</option>
+        <option value="174">174 - Togo</option>
+        <option value="175">175 - Tonga</option>
+        <option value="176">176 - Trinidad and Tobago</option>
+        <option value="177">177 - Tunisia</option>
+        <option value="178">178 - Turkey</option>
+        <option value="179">179 - Turkmenistan</option>
+        <option value="180">180 - Tuvalu</option>
+        <option value="181">181 - Uganda</option>
+        <option value="182">182 - Ukraine</option>
+        <option value="183">183 - United Arab Emirates</option>
+        <option value="184">184 - United Kingdom</option>
+        <option value="185">185 - United States</option>
+        <option value="186">186 - Uruguay</option>
+        <option value="187">187 - Uzbekistan</option>
+        <option value="188">188 - Vanuatu</option>
+        <option value="189">189 - Venezuela</option>
+        <option value="190">190 - Vietnam</option>
+        <option value="191">191 - Yemen</option>
+        <option value="192">192 - Zambia</option>
+        <option value="193">193 - Zimbabwe</option>
+      </select>
+    </div>
+
+    <div class="question">
+      <label for="residentCountriesSelect">In which country/countries do you currently reside or have you lived?</label>
+      <p class="small">Multiple choice is possible. On Windows, hold Ctrl while selecting multiple countries.</p>
+      <select id="residentCountriesSelect" multiple>
+        <option value="1">1 - Afghanistan</option>
+        <option value="2">2 - Albania</option>
+        <option value="3">3 - Algeria</option>
+        <option value="4">4 - Andorra</option>
+        <option value="5">5 - Angola</option>
+        <option value="6">6 - Antigua and Barbuda</option>
+        <option value="7">7 - Argentina</option>
+        <option value="8">8 - Armenia</option>
+        <option value="9">9 - Australia</option>
+        <option value="10">10 - Austria</option>
+        <option value="11">11 - Azerbaijan</option>
+        <option value="12">12 - Bahamas</option>
+        <option value="13">13 - Bahrain</option>
+        <option value="14">14 - Bangladesh</option>
+        <option value="15">15 - Barbados</option>
+        <option value="16">16 - Belarus</option>
+        <option value="17">17 - Belgium</option>
+        <option value="18">18 - Belize</option>
+        <option value="19">19 - Benin</option>
+        <option value="20">20 - Bhutan</option>
+        <option value="21">21 - Bolivia</option>
+        <option value="22">22 - Bosnia and Herzegovina</option>
+        <option value="23">23 - Botswana</option>
+        <option value="24">24 - Brazil</option>
+        <option value="25">25 - Brunei</option>
+        <option value="26">26 - Bulgaria</option>
+        <option value="27">27 - Burkina Faso</option>
+        <option value="28">28 - Burundi</option>
+        <option value="29">29 - Cabo Verde</option>
+        <option value="30">30 - Cambodia</option>
+        <option value="31">31 - Cameroon</option>
+        <option value="32">32 - Canada</option>
+        <option value="33">33 - Central African Republic</option>
+        <option value="34">34 - Chad</option>
+        <option value="35">35 - Chile</option>
+        <option value="36">36 - China</option>
+        <option value="37">37 - Colombia</option>
+        <option value="38">38 - Comoros</option>
+        <option value="39">39 - Congo</option>
+        <option value="40">40 - Costa Rica</option>
+        <option value="41">41 - Croatia</option>
+        <option value="42">42 - Cuba</option>
+        <option value="43">43 - Cyprus</option>
+        <option value="44">44 - Czech Republic</option>
+        <option value="45">45 - Denmark</option>
+        <option value="46">46 - Djibouti</option>
+        <option value="47">47 - Dominica</option>
+        <option value="48">48 - Dominican Republic</option>
+        <option value="49">49 - Ecuador</option>
+        <option value="50">50 - Egypt</option>
+        <option value="51">51 - El Salvador</option>
+        <option value="52">52 - Equatorial Guinea</option>
+        <option value="53">53 - Eritrea</option>
+        <option value="54">54 - Estonia</option>
+        <option value="55">55 - Eswatini</option>
+        <option value="56">56 - Ethiopia</option>
+        <option value="57">57 - Fiji</option>
+        <option value="58">58 - Finland</option>
+        <option value="59">59 - France</option>
+        <option value="60">60 - Gabon</option>
+        <option value="61">61 - Gambia</option>
+        <option value="62">62 - Georgia</option>
+        <option value="63">63 - Germany</option>
+        <option value="64">64 - Ghana</option>
+        <option value="65">65 - Greece</option>
+        <option value="66">66 - Grenada</option>
+        <option value="67">67 - Guatemala</option>
+        <option value="68">68 - Guinea</option>
+        <option value="69">69 - Guinea-Bissau</option>
+        <option value="70">70 - Guyana</option>
+        <option value="71">71 - Haiti</option>
+        <option value="72">72 - Honduras</option>
+        <option value="73">73 - Hungary</option>
+        <option value="74">74 - Iceland</option>
+        <option value="75">75 - India</option>
+        <option value="76">76 - Indonesia</option>
+        <option value="77">77 - Iran</option>
+        <option value="78">78 - Iraq</option>
+        <option value="79">79 - Ireland</option>
+        <option value="80">80 - Israel</option>
+        <option value="81">81 - Italy</option>
+        <option value="82">82 - Ivory Coast</option>
+        <option value="83">83 - Jamaica</option>
+        <option value="84">84 - Japan</option>
+        <option value="85">85 - Jordan</option>
+        <option value="86">86 - Kazakhstan</option>
+        <option value="87">87 - Kenya</option>
+        <option value="88">88 - Kiribati</option>
+        <option value="89">89 - Kuwait</option>
+        <option value="90">90 - Kyrgyzstan</option>
+        <option value="91">91 - Laos</option>
+        <option value="92">92 - Latvia</option>
+        <option value="93">93 - Lebanon</option>
+        <option value="94">94 - Lesotho</option>
+        <option value="95">95 - Liberia</option>
+        <option value="96">96 - Libya</option>
+        <option value="97">97 - Liechtenstein</option>
+        <option value="98">98 - Lithuania</option>
+        <option value="99">99 - Luxembourg</option>
+        <option value="100">100 - Madagascar</option>
+        <option value="101">101 - Malawi</option>
+        <option value="102">102 - Malaysia</option>
+        <option value="103">103 - Maldives</option>
+        <option value="104">104 - Mali</option>
+        <option value="105">105 - Malta</option>
+        <option value="106">106 - Marshall Islands</option>
+        <option value="107">107 - Mauritania</option>
+        <option value="108">108 - Mauritius</option>
+        <option value="109">109 - Mexico</option>
+        <option value="110">110 - Micronesia</option>
+        <option value="111">111 - Moldova</option>
+        <option value="112">112 - Monaco</option>
+        <option value="113">113 - Mongolia</option>
+        <option value="114">114 - Montenegro</option>
+        <option value="115">115 - Morocco</option>
+        <option value="116">116 - Mozambique</option>
+        <option value="117">117 - Myanmar</option>
+        <option value="118">118 - Namibia</option>
+        <option value="119">119 - Nauru</option>
+        <option value="120">120 - Nepal</option>
+        <option value="121">121 - Netherlands</option>
+        <option value="122">122 - New Zealand</option>
+        <option value="123">123 - Nicaragua</option>
+        <option value="124">124 - Niger</option>
+        <option value="125">125 - Nigeria</option>
+        <option value="126">126 - North Korea</option>
+        <option value="127">127 - North Macedonia</option>
+        <option value="128">128 - Norway</option>
+        <option value="129">129 - Oman</option>
+        <option value="130">130 - Pakistan</option>
+        <option value="131">131 - Palau</option>
+        <option value="132">132 - Panama</option>
+        <option value="133">133 - Papua New Guinea</option>
+        <option value="134">134 - Paraguay</option>
+        <option value="135">135 - Peru</option>
+        <option value="136">136 - Philippines</option>
+        <option value="137">137 - Poland</option>
+        <option value="138">138 - Portugal</option>
+        <option value="139">139 - Qatar</option>
+        <option value="140">140 - Romania</option>
+        <option value="141">141 - Russia</option>
+        <option value="142">142 - Rwanda</option>
+        <option value="143">143 - Saint Kitts and Nevis</option>
+        <option value="144">144 - Saint Lucia</option>
+        <option value="145">145 - Saint Vincent and the Grenadines</option>
+        <option value="146">146 - Samoa</option>
+        <option value="147">147 - San Marino</option>
+        <option value="148">148 - Sao Tome and Principe</option>
+        <option value="149">149 - Saudi Arabia</option>
+        <option value="150">150 - Senegal</option>
+        <option value="151">151 - Serbia</option>
+        <option value="152">152 - Seychelles</option>
+        <option value="153">153 - Sierra Leone</option>
+        <option value="154">154 - Singapore</option>
+        <option value="155">155 - Slovakia</option>
+        <option value="156">156 - Slovenia</option>
+        <option value="157">157 - Solomon Islands</option>
+        <option value="158">158 - Somalia</option>
+        <option value="159">159 - South Africa</option>
+        <option value="160">160 - South Korea</option>
+        <option value="161">161 - South Sudan</option>
+        <option value="162">162 - Spain</option>
+        <option value="163">163 - Sri Lanka</option>
+        <option value="164">164 - Sudan</option>
+        <option value="165">165 - Suriname</option>
+        <option value="166">166 - Sweden</option>
+        <option value="167">167 - Switzerland</option>
+        <option value="168">168 - Syria</option>
+        <option value="169">169 - Taiwan</option>
+        <option value="170">170 - Tajikistan</option>
+        <option value="171">171 - Tanzania</option>
+        <option value="172">172 - Thailand</option>
+        <option value="173">173 - Timor-Leste</option>
+        <option value="174">174 - Togo</option>
+        <option value="175">175 - Tonga</option>
+        <option value="176">176 - Trinidad and Tobago</option>
+        <option value="177">177 - Tunisia</option>
+        <option value="178">178 - Turkey</option>
+        <option value="179">179 - Turkmenistan</option>
+        <option value="180">180 - Tuvalu</option>
+        <option value="181">181 - Uganda</option>
+        <option value="182">182 - Ukraine</option>
+        <option value="183">183 - United Arab Emirates</option>
+        <option value="184">184 - United Kingdom</option>
+        <option value="185">185 - United States</option>
+        <option value="186">186 - Uruguay</option>
+        <option value="187">187 - Uzbekistan</option>
+        <option value="188">188 - Vanuatu</option>
+        <option value="189">189 - Venezuela</option>
+        <option value="190">190 - Vietnam</option>
+        <option value="191">191 - Yemen</option>
+        <option value="192">192 - Zambia</option>
+        <option value="193">193 - Zimbabwe</option>
+      </select>
+    </div>
+
+    <div class="question">
+      <label>Do you have children?</label>
+      <div class="checkbox-row">
+        <input type="checkbox" id="childUnder6">
+        <span>Children under 6 years old</span>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="childOver7">
+        <span>Children over 7 years old</span>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="childNone" onchange="handleChildrenSelection()">
+        <span>No children</span>
+      </div>
+    </div>
+
+    <div class="question">
+      <label for="cyclingSelect">How do you feel when cycling in an urban city?</label>
+      <select id="cyclingSelect">
+        <option value="">Please select</option>
+        <option>Very uncomfortable</option>
+        <option>Slightly uncomfortable</option>
+        <option>Neutral</option>
+        <option>Somewhat confident</option>
+        <option>Very confident</option>
+        <option>I don't know</option>
+      </select>
+    </div>
+
+    <div class="question">
+      <label>How many days per week do you use each micromobility mode, weather permitting?</label>
+      <table class="frequency-grid">
+        <tr><th>Mode</th><th>Summer</th><th>Winter</th></tr>
+        <tr>
+          <td>Conventional bike</td>
+          <td><select id="summerConventionalBike"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+          <td><select id="winterConventionalBike"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+        </tr>
+        <tr>
+          <td>E-bike</td>
+          <td><select id="summerEBike"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+          <td><select id="winterEBike"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+        </tr>
+        <tr>
+          <td>E-scooter</td>
+          <td><select id="summerEScooter"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+          <td><select id="winterEScooter"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+        </tr>
+        <tr>
+          <td>Cargo bike</td>
+          <td><select id="summerCargoBike"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+          <td><select id="winterCargoBike"><option value="">Please select</option><option>Never</option><option>Less than one day in a week</option><option>One or two days in a week</option><option>Three to five days in a week</option><option>Almost every day</option></select></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="question">
+      <label for="cyclistTypeSelect">How would you describe your cyclist type?</label>
+      <select id="cyclistTypeSelect">
+        <option value="">Please select</option>
+        <option>Strong and Fearless : I am comfortable cycling in all conditions, with or without dedicated bike infrastructure.</option>
+        <option>Enthused and Confident : I am comfortable cycling on roads with cars, but I prefer having dedicated cycling infrastructure.</option>
+        <option>Interested but Concerned : I am open to cycling, but only if there is high-quality infrastructure and I feel safe.</option>
+        <option>No Way, No How : I am not willing to cycle, even if good infrastructure is provided.</option>
+      </select>
+    </div>
+
+    <button onclick="saveDemographicsAndStart()">Start video task</button>
+  </div>
+
+  <div id="experimentScreen" class="hidden">
+    <div class="progress" id="progressText"></div>
+    <p><b>Question:</b> Which video looks more stressful / unsafe?</p>
+    <p class="small">
+      Press the button once. The Top video will play first and the Bottom video will start automatically.
+      Both are muted.
+    </p>
+
+    <div class="youtube-panel">
+      <div class="video-label" id="currentVideoLabel">Top video</div>
+      <div class="youtube-stage">
+        <div id="youtubePlayer"></div>
+        <div id="finishedOverlay">Both videos finished</div>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button id="playSequenceButton" onclick="playSequence()">Play video sequence</button>
+    </div>
+
+    <div class="buttons">
+      <button id="btnTop" onclick="submitAnswer('top')" disabled>Top video</button>
+      <button id="btnSame" onclick="submitAnswer('same')" disabled>Same</button>
+      <button id="btnBottom" onclick="submitAnswer('bottom')" disabled>Bottom video</button>
+    </div>
+
+    <p class="small" id="statusText"></p>
+
+    <div style="margin-top:24px;text-align:center;">
+      <p class="small">
+        Need to stop now? You can save the answers completed so far and continue later on this device.
+      </p>
+      <button onclick="submitPartialResult()"
+              style="font-size:14px;padding:8px 14px;">
+        Save partial result
+      </button>
+      <p class="small" id="partialStatusText"></p>
+    </div>
+  </div>
+
+  <div id="endScreen" class="hidden">
+    <h2>Finished. Thank you!</h2>
+    <p>All video comparison trials are complete.</p>
+
+    <div class="notice">
+      Your complete questionnaire result has been converted into one compact result code.
+      Please submit this code using the Microsoft Form.
+    </div>
+
+    <div class="question">
+      <label for="resultCodeBox">Result code</label>
+      <textarea id="resultCodeBox" readonly
+        style="width:100%;min-height:145px;font-family:monospace;font-size:13px;padding:10px;"></textarea>
+      <p class="small">
+        Characters: <span id="resultCodeLength">0</span>.
+        The demographic section is encrypted. The video/trial section remains readable by design.
+      </p>
+    </div>
+
+    <div class="buttons">
+      <button onclick="copyAndOpenMicrosoftForm()"
+              style="font-size:20px;font-weight:bold;padding:15px 28px;">
+        Submit result in Microsoft Forms
+      </button>
+    </div>
+
+    <div class="notice" style="margin-top:18px;">
+      <p class="small" style="margin:0 0 8px 0;">
+        If Microsoft Forms does not open or submission fails, use this backup option.
+      </p>
+      <button onclick="copyResultCode()"
+              style="font-size:15px;padding:9px 16px;margin:0;">
+        Copy result code
+      </button>
+    </div>
+
+    <p class="small" id="formStatusText"></p>
+  </div>
+
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+// ---------------------------------------------------------------------
+// MICROSOFT FORMS CONFIGURATION
+//
+// 1. Create one required Text question in Microsoft Forms:
+//       Survey result code
+//
+// 2. In Microsoft Forms choose:
+//       ... -> Get Pre-filled URL
+//    Enable pre-filled answers and enter exactly:
+//       RESULTCODEHERE
+//
+// 3. Copy that generated URL and paste it below.
+//
+// The questionnaire will replace RESULTCODEHERE with the real compact code.
+// ---------------------------------------------------------------------
+const MICROSOFT_FORM_PREFILLED_URL =
+  "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=6Ul7XdJQ3EC6sRSi2QNULB5HApO8gOZPusU9Qk28DCNUMVJQSTVEVDBENEFDNlIzOFc2M1lIUlVCNS4u&re1eadeadb8744a85bda1c804b2cfd181=RESULTCODEHERE";
+
+const MICROSOFT_FORM_PLACEHOLDER = "RESULTCODEHERE";
+
+// Public encryption key.
+// It is safe for this PUBLIC key to be visible in GitHub.
+// Keep the matching PRIVATE key offline and never upload it to GitHub.
+const DEMOGRAPHIC_RSA_PUBLIC_KEY_PEM = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp2FdAMEudRRudCPqXHEV
+1yvF/70STybOLGsam1zrL6wCK9+iravWx7l+XeFFUmQWFYqA2fHhmBwwTw+NMX7l
+2xLSqatKFnBdGIA2GKwqhiyUswcEaM3pdd6uNhj4Zw0lo8mrtopLIXqq0jnxc/E2
+6Vf3rjHLtJ9X+CyP4YX6v1AaDo8GG4J7WjpXQMBrWLQcKNwNTV9uPYYWxiAzegb9
+ccqj+wFOiLLinocaWCsOawC8wCP8KM2YSHVId1uFr2QQw7a/qSwaxVsU3ZJkG18h
+c5cYZE3BbektQWaOC8ZSHH53yAqVtLTKrw3TSA7m3DY/2h8xCyF/8hWF4psvkliN
+iwIDAQAB
+-----END PUBLIC KEY-----
+`;
+
+
+const COUNTRY_CODE_BY_LABEL = {"Afghanistan":1,"Albania":2,"Algeria":3,"Andorra":4,"Angola":5,"Antigua and Barbuda":6,"Argentina":7,"Armenia":8,"Australia":9,"Austria":10,"Azerbaijan":11,"Bahamas":12,"Bahrain":13,"Bangladesh":14,"Barbados":15,"Belarus":16,"Belgium":17,"Belize":18,"Benin":19,"Bhutan":20,"Bolivia":21,"Bosnia and Herzegovina":22,"Botswana":23,"Brazil":24,"Brunei":25,"Bulgaria":26,"Burkina Faso":27,"Burundi":28,"Cabo Verde":29,"Cambodia":30,"Cameroon":31,"Canada":32,"Central African Republic":33,"Chad":34,"Chile":35,"China":36,"Colombia":37,"Comoros":38,"Congo":39,"Costa Rica":40,"Croatia":41,"Cuba":42,"Cyprus":43,"Czech Republic":44,"Denmark":45,"Djibouti":46,"Dominica":47,"Dominican Republic":48,"Ecuador":49,"Egypt":50,"El Salvador":51,"Equatorial Guinea":52,"Eritrea":53,"Estonia":54,"Eswatini":55,"Ethiopia":56,"Fiji":57,"Finland":58,"France":59,"Gabon":60,"Gambia":61,"Georgia":62,"Germany":63,"Ghana":64,"Greece":65,"Grenada":66,"Guatemala":67,"Guinea":68,"Guinea-Bissau":69,"Guyana":70,"Haiti":71,"Honduras":72,"Hungary":73,"Iceland":74,"India":75,"Indonesia":76,"Iran":77,"Iraq":78,"Ireland":79,"Israel":80,"Italy":81,"Ivory Coast":82,"Jamaica":83,"Japan":84,"Jordan":85,"Kazakhstan":86,"Kenya":87,"Kiribati":88,"Kuwait":89,"Kyrgyzstan":90,"Laos":91,"Latvia":92,"Lebanon":93,"Lesotho":94,"Liberia":95,"Libya":96,"Liechtenstein":97,"Lithuania":98,"Luxembourg":99,"Madagascar":100,"Malawi":101,"Malaysia":102,"Maldives":103,"Mali":104,"Malta":105,"Marshall Islands":106,"Mauritania":107,"Mauritius":108,"Mexico":109,"Micronesia":110,"Moldova":111,"Monaco":112,"Mongolia":113,"Montenegro":114,"Morocco":115,"Mozambique":116,"Myanmar":117,"Namibia":118,"Nauru":119,"Nepal":120,"Netherlands":121,"New Zealand":122,"Nicaragua":123,"Niger":124,"Nigeria":125,"North Korea":126,"North Macedonia":127,"Norway":128,"Oman":129,"Pakistan":130,"Palau":131,"Panama":132,"Papua New Guinea":133,"Paraguay":134,"Peru":135,"Philippines":136,"Poland":137,"Portugal":138,"Qatar":139,"Romania":140,"Russia":141,"Rwanda":142,"Saint Kitts and Nevis":143,"Saint Lucia":144,"Saint Vincent and the Grenadines":145,"Samoa":146,"San Marino":147,"Sao Tome and Principe":148,"Saudi Arabia":149,"Senegal":150,"Serbia":151,"Seychelles":152,"Sierra Leone":153,"Singapore":154,"Slovakia":155,"Slovenia":156,"Solomon Islands":157,"Somalia":158,"South Africa":159,"South Korea":160,"South Sudan":161,"Spain":162,"Sri Lanka":163,"Sudan":164,"Suriname":165,"Sweden":166,"Switzerland":167,"Syria":168,"Taiwan":169,"Tajikistan":170,"Tanzania":171,"Thailand":172,"Timor-Leste":173,"Togo":174,"Tonga":175,"Trinidad and Tobago":176,"Tunisia":177,"Turkey":178,"Turkmenistan":179,"Tuvalu":180,"Uganda":181,"Ukraine":182,"United Arab Emirates":183,"United Kingdom":184,"United States":185,"Uruguay":186,"Uzbekistan":187,"Vanuatu":188,"Venezuela":189,"Vietnam":190,"Yemen":191,"Zambia":192,"Zimbabwe":193};
+
+
+// ---------------------------------------------------------------------
+// REAL 50-VIDEO STUDY CONFIGURATION
+//
+// 30 analysis trials:
+//   10 = same participant / different detection category
+//   15 = similar-situation pairs
+//    5 = random subjective-only stress pairs
+//        (different participant AND not in the same situation group)
+//
+// + 1 identical-video quality-control trial.
+//   The QC trial is inserted AFTER a random 10-20 completed analysis trials,
+//   so it appears as displayed Trial 11-21.
+//
+// Video links are loaded from video_links.csv in the same GitHub folder.
+// ---------------------------------------------------------------------
+
+const VIDEOS = {
+  "1": {
+    "video_id": 1,
+    "filename": "P3_stress1_LFR.mp4",
+    "participant_id": "P3",
+    "event_id": 1,
+    "stress": "stress",
+    "stress_detection": "both",
+    "youtube_id": ""
+  },
+  "2": {
+    "video_id": 2,
+    "filename": "P3_stress2_LFR.mp4",
+    "participant_id": "P3",
+    "event_id": 2,
+    "stress": "stress",
+    "stress_detection": "both",
+    "youtube_id": ""
+  },
+  "3": {
+    "video_id": 3,
+    "filename": "P3_stress3_LFR.mp4",
+    "participant_id": "P3",
+    "event_id": 3,
+    "stress": "stress",
+    "stress_detection": "both",
+    "youtube_id": ""
+  },
+  "4": {
+    "video_id": 4,
+    "filename": "P8_stress1_LFR.mp4",
+    "participant_id": "P8",
+    "event_id": 1,
+    "stress": "stress",
+    "stress_detection": "both",
+    "youtube_id": ""
+  },
+  "5": {
+    "video_id": 5,
+    "filename": "P8_stress2_LFR.mp4",
+    "participant_id": "P8",
+    "event_id": 2,
+    "stress": "stress",
+    "stress_detection": "subjective",
+    "youtube_id": ""
+  },
+  "6": {
+    "video_id": 6,
+    "filename": "P10_stress3_LFR.mp4",
+    "participant_id": "P10",
+    "event_id": 3,
+    "stress": "stress",
+    "stress_detection": "both",
+    "youtube_id": ""
+  },
+  "7": {
+    "video_id": 7,
+    "filename": "P10_stress1_LFR.mp4",
+    "participant_id": "P10",
+    "event_id": 1,
+    "stress": "stress",
+    "stress_detection": "objective",
+    "youtube_id": ""
+  },
+  "8": {
+    "video_id": 8,
+    "filename": "P16_stress1_LFR.mp4",
+    "participant_id": "P16",
+    "event_id": 1,
+    "stress": "stress",
+    "stress_detection": "objective",
+    "youtube_id": ""
+  },
+  "9": {
+    "video_id": 9,
+    "filename": "P16_stress2_LFR.mp4",
+    "participant_id": "P16",
+    "event_id": 2,
+    "stress": "stress",
+    "stress_detection": "objective",
+    "youtube_id": ""
+  },
+  "10": {
+    "video_id": 10,
+    "filename": "P16_stress3_LFR.mp4",
+    "participant_id": "P16",
+    "event_id": 3,
+    "stress": "stress",
+    "stress_detection": "objective",
+    "youtube_id": ""
+  },
+  "11": {
+    "video_id": 11,
+    "filename": "P20_stress1_LFR.mp4",
+    "participant_id": "P20",
+    "event_id": 1,
+    "stress": "stress",
+    "stress_detection": "subjective",
+    "youtube_id": ""
+  },
+  "12": {
+    "video_id": 12,
+    "filename": "P20_stress2_LFR.mp4",
+    "participant_id": "P20",
+    "event_id": 2,
+    "stress": "stress",
+    "stress_detection": "objective",
+    "youtube_id": ""
+  },
+  "13": {
+    "video_id": 13,
+    "filename": "P20_stress3_LFR.mp4",
+    "participant_id": "P20",
+    "event_id": 3,
+    "stress": "stress",
+    "stress_detection": "both",
+    "youtube_id": ""
+  },
+  "14": {
+    "video_id": 14,
+    "filename": "P21_stress1_LFR.mp4",
+    "participant_id": "P21",
+    "event_id": 1,
+    "stress": "stress",
+    "stress_detection": "objective",
+    "youtube_id": ""
+  },
+  "15": {
+    "video_id": 15,
+    "filename": "P21_stress2_LFR.mp4",
+    "participant_id": "P21",
+    "event_id": 2,
+    "stress": "stress",
+    "stress_detection": "objective",
+    "youtube_id": ""
+  },
+  "16": {
+    "video_id": 16,
+    "filename": "P21_stress3_LFR.mp4",
+    "participant_id": "P21",
+    "event_id": 3,
+    "stress": "stress",
+    "stress_detection": "subjective",
+    "youtube_id": ""
+  },
+  "17": {
+    "video_id": 17,
+    "filename": "P22_stress1_LFR.mp4",
+    "participant_id": "P22",
+    "event_id": 1,
+    "stress": "stress",
+    "stress_detection": "subjective",
+    "youtube_id": ""
+  },
+  "18": {
+    "video_id": 18,
+    "filename": "P22_stress2_LFR.mp4",
+    "participant_id": "P22",
+    "event_id": 2,
+    "stress": "stress",
+    "stress_detection": "subjective",
+    "youtube_id": ""
+  },
+  "19": {
+    "video_id": 19,
+    "filename": "P22_stress3_LFR.mp4",
+    "participant_id": "P22",
+    "event_id": 3,
+    "stress": "stress",
+    "stress_detection": "both",
+    "youtube_id": ""
+  },
+  "20": {
+    "video_id": 20,
+    "filename": "P23_stress1_LFR.mp4",
+    "participant_id": "P23",
+    "event_id": 1,
+    "stress": "stress",
+    "stress_detection": "subjective",
+    "youtube_id": ""
+  },
+  "21": {
+    "video_id": 21,
+    "filename": "P24_stress1_LFR.mp4",
+    "participant_id": "P24",
+    "event_id": 1,
+    "stress": "stress",
+    "stress_detection": "subjective",
+    "youtube_id": ""
+  },
+  "22": {
+    "video_id": 22,
+    "filename": "P24_stress2_LFR.mp4",
+    "participant_id": "P24",
+    "event_id": 2,
+    "stress": "stress",
+    "stress_detection": "both",
+    "youtube_id": ""
+  },
+  "23": {
+    "video_id": 23,
+    "filename": "P24_stress3_LFR.mp4",
+    "participant_id": "P24",
+    "event_id": 3,
+    "stress": "stress",
+    "stress_detection": "subjective",
+    "youtube_id": ""
+  },
+  "24": {
+    "video_id": 24,
+    "filename": "P24_stress4_LFR.mp4",
+    "participant_id": "P24",
+    "event_id": 4,
+    "stress": "stress",
+    "stress_detection": "subjective",
+    "youtube_id": ""
+  },
+  "25": {
+    "video_id": 25,
+    "filename": "P27_stress1_LFR.mp4",
+    "participant_id": "P27",
+    "event_id": 1,
+    "stress": "stress",
+    "stress_detection": "both",
+    "youtube_id": ""
+  },
+  "26": {
+    "video_id": 26,
+    "filename": "P27_stress2_LFR.mp4",
+    "participant_id": "P27",
+    "event_id": 2,
+    "stress": "stress",
+    "stress_detection": "subjective",
+    "youtube_id": ""
+  },
+  "27": {
+    "video_id": 27,
+    "filename": "P17_normal2_LFR.mp4",
+    "participant_id": "P17",
+    "event_id": 2,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "28": {
+    "video_id": 28,
+    "filename": "P17_normal1_LFR.mp4",
+    "participant_id": "P17",
+    "event_id": 1,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "29": {
+    "video_id": 29,
+    "filename": "P27_stress3_LFR.mp4",
+    "participant_id": "P27",
+    "event_id": 3,
+    "stress": "stress",
+    "stress_detection": "objective",
+    "youtube_id": ""
+  },
+  "30": {
+    "video_id": 30,
+    "filename": "P27_stress4_LFR.mp4",
+    "participant_id": "P27",
+    "event_id": 4,
+    "stress": "stress",
+    "stress_detection": "objective",
+    "youtube_id": ""
+  },
+  "31": {
+    "video_id": 31,
+    "filename": "P10_stress2_LFR.mp4",
+    "participant_id": "P10",
+    "event_id": 2,
+    "stress": "stress",
+    "stress_detection": "both",
+    "youtube_id": ""
+  },
+  "32": {
+    "video_id": 32,
+    "filename": "P3_normal1_LFR.mp4",
+    "participant_id": "P3",
+    "event_id": 1,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "33": {
+    "video_id": 33,
+    "filename": "P22_normal1_LFR.mp4",
+    "participant_id": "P22",
+    "event_id": 1,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "34": {
+    "video_id": 34,
+    "filename": "P23_normal1_LFR.mp4",
+    "participant_id": "P23",
+    "event_id": 1,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "35": {
+    "video_id": 35,
+    "filename": "P21_normal1_LFR.mp4",
+    "participant_id": "P21",
+    "event_id": 1,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "36": {
+    "video_id": 36,
+    "filename": "P21_normal2_LFR.mp4",
+    "participant_id": "P21",
+    "event_id": 2,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "37": {
+    "video_id": 37,
+    "filename": "P21_normal3_LFR.mp4",
+    "participant_id": "P21",
+    "event_id": 3,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "38": {
+    "video_id": 38,
+    "filename": "P10_normal1_LFR.mp4",
+    "participant_id": "P10",
+    "event_id": 1,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "39": {
+    "video_id": 39,
+    "filename": "P17_stress2_LFR.mp4",
+    "participant_id": "P17",
+    "event_id": 2,
+    "stress": "stress",
+    "stress_detection": "objective",
+    "youtube_id": ""
+  },
+  "40": {
+    "video_id": 40,
+    "filename": "P17_stress1_LFR.mp4",
+    "participant_id": "P17",
+    "event_id": 1,
+    "stress": "stress",
+    "stress_detection": "both",
+    "youtube_id": ""
+  },
+  "41": {
+    "video_id": 41,
+    "filename": "P27_normal1_LFR.mp4",
+    "participant_id": "P27",
+    "event_id": 1,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "42": {
+    "video_id": 42,
+    "filename": "P24_normal1_LFR.mp4",
+    "participant_id": "P24",
+    "event_id": 1,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "43": {
+    "video_id": 43,
+    "filename": "P23_normal2_LFR.mp4",
+    "participant_id": "P23",
+    "event_id": 2,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "44": {
+    "video_id": 44,
+    "filename": "P10_normal2_LFR.mp4",
+    "participant_id": "P10",
+    "event_id": 2,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "45": {
+    "video_id": 45,
+    "filename": "P10_normal3_LFR.mp4",
+    "participant_id": "P10",
+    "event_id": 3,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "46": {
+    "video_id": 46,
+    "filename": "P23_normal3_LFR.mp4",
+    "participant_id": "P23",
+    "event_id": 3,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "47": {
+    "video_id": 47,
+    "filename": "P16_normal1_LFR.mp4",
+    "participant_id": "P16",
+    "event_id": 1,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "48": {
+    "video_id": 48,
+    "filename": "P16_normal2_LFR.mp4",
+    "participant_id": "P16",
+    "event_id": 2,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "49": {
+    "video_id": 49,
+    "filename": "P20_normal1_LFR.mp4",
+    "participant_id": "P20",
+    "event_id": 1,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  },
+  "50": {
+    "video_id": 50,
+    "filename": "P16_normal3_LFR.mp4",
+    "participant_id": "P16",
+    "event_id": 3,
+    "stress": "normal",
+    "stress_detection": "no",
+    "youtube_id": ""
+  }
+};
+
+const SITUATION_GROUPS = [[37, 46, 19, 24, 13, 3], [23, 36], [2, 18, 20, 29, 42, 49], [12, 16, 26, 32], [33, 35], [22, 43, 41, 11, 15, 17], [48, 6], [5, 39, 50], [8, 27], [4, 40, 44], [38, 47], [31, 28], [9, 45], [7, 21, 34], [1, 14, 25], [30, 10]];
+
+const ANALYSIS_PAIR_COUNTS = {
+  same_participant_different_detection: 10,
+  similar_situation: 15,
+  random_subjective_stress: 5
+};
+
+const ATTENTION_CHECK_SOURCE = "attention_check";
+
+let videoLinksLoaded = false;
+let surveyReady = false;
+
+function normalizeVideoId(raw) {
+  const text = String(raw || "").trim();
+  const m = text.match(/^(?:V)?0*(\d+)$/i);
+  return m ? Number(m[1]) : NaN;
+}
+
+function extractYouTubeId(value) {
+  const text = String(value || "").trim();
+  if (!text) return "";
+
+  // Already a bare 11-character YouTube ID.
+  if (/^[A-Za-z0-9_-]{11}$/.test(text)) return text;
+
+  try {
+    const url = new URL(text);
+    if (url.hostname.includes("youtu.be")) {
+      return url.pathname.split("/").filter(Boolean)[0] || "";
+    }
+
+    const v = url.searchParams.get("v");
+    if (v) return v;
+
+    const parts = url.pathname.split("/").filter(Boolean);
+    const markerIndex = parts.findIndex(p =>
+      ["embed", "shorts", "live"].includes(p.toLowerCase())
+    );
+    if (markerIndex >= 0 && parts[markerIndex + 1]) {
+      return parts[markerIndex + 1];
+    }
+  } catch (e) {
+    // Fall through.
+  }
+
+  return "";
+}
+
+function parseSimpleCsv(text) {
+  // video_links.csv is intentionally simple: no commas are expected in fields.
+  const lines = text.replace(/^\uFEFF/, "")
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(Boolean);
+
+  if (lines.length < 2) return [];
+
+  const headers = lines[0].split(",").map(h => h.trim().toLowerCase());
+
+  return lines.slice(1).map(line => {
+    const cells = line.split(",").map(x => x.trim());
+    const row = {};
+    headers.forEach((h, i) => row[h] = cells[i] || "");
+    return row;
+  });
+}
+
+async function loadVideoLinks() {
+  const response = await fetch("video_links.csv", {cache: "no-store"});
+  if (!response.ok) {
+    throw new Error(
+      `Could not load video_links.csv (HTTP ${response.status}).`
+    );
+  }
+
+  const rows = parseSimpleCsv(await response.text());
+
+  for (const row of rows) {
+    const id = normalizeVideoId(row.video_id || row.videoid || row.id);
+    if (!Number.isFinite(id) || !VIDEOS[id]) continue;
+
+    const youtubeId = extractYouTubeId(
+      row.youtube_url || row.youtube_link || row.url || row.youtube_id
+    );
+
+    if (youtubeId) VIDEOS[id].youtube_id = youtubeId;
+  }
+
+  const missing = Object.values(VIDEOS)
+    .filter(v => !v.youtube_id)
+    .map(v => v.video_id);
+
+  if (missing.length) {
+    throw new Error(
+      "Missing/invalid YouTube links for VideoID(s): " + missing.join(", ")
+    );
+  }
+
+  videoLinksLoaded = true;
+}
+
+function pairKey(a, b) {
+  const x = Math.min(Number(a), Number(b));
+  const y = Math.max(Number(a), Number(b));
+  return `${x}-${y}`;
+}
+
+function situationGroupIdsForPair(a, b) {
+  const ids = [];
+  SITUATION_GROUPS.forEach((group, index) => {
+    if (group.includes(Number(a)) && group.includes(Number(b))) {
+      ids.push(index + 1);
+    }
+  });
+  return ids;
+}
+
+function allVideoIds() {
+  return Object.keys(VIDEOS).map(Number).sort((a, b) => a - b);
+}
+
+function sameParticipantCandidates() {
+  const ids = allVideoIds();
+  const out = [];
+
+  for (let i = 0; i < ids.length; i++) {
+    for (let j = i + 1; j < ids.length; j++) {
+      const a = VIDEOS[ids[i]];
+      const b = VIDEOS[ids[j]];
+
+      if (
+        a.participant_id === b.participant_id &&
+        a.stress_detection !== b.stress_detection
+      ) {
+        out.push({
+          selection_source: "same_participant_different_detection",
+          situation_group_ids: [],
+          a: a.video_id,
+          b: b.video_id
+        });
+      }
+    }
+  }
+
+  return out;
+}
+
+function similarSituationCandidates() {
+  const byKey = new Map();
+
+  SITUATION_GROUPS.forEach((group, groupIndex) => {
+    for (let i = 0; i < group.length; i++) {
+      for (let j = i + 1; j < group.length; j++) {
+        const a = group[i];
+        const b = group[j];
+        const key = pairKey(a, b);
+
+        if (!byKey.has(key)) {
+          byKey.set(key, {
+            selection_source: "similar_situation",
+            situation_group_ids: [],
+            a: a,
+            b: b
+          });
+        }
+
+        byKey.get(key).situation_group_ids.push(groupIndex + 1);
+      }
+    }
+  });
+
+  return Array.from(byKey.values());
+}
+
+function subjectiveRandomCandidates() {
+  const ids = allVideoIds().filter(id =>
+    VIDEOS[id].stress_detection === "subjective"
+  );
+
+  const out = [];
+
+  for (let i = 0; i < ids.length; i++) {
+    for (let j = i + 1; j < ids.length; j++) {
+      const a = VIDEOS[ids[i]];
+      const b = VIDEOS[ids[j]];
+
+      if (a.participant_id === b.participant_id) continue;
+      if (situationGroupIdsForPair(a.video_id, b.video_id).length > 0) continue;
+
+      out.push({
+        selection_source: "random_subjective_stress",
+        situation_group_ids: [],
+        a: a.video_id,
+        b: b.video_id
+      });
+    }
+  }
+
+  return out;
+}
+
+function chooseBalancedPairs(candidates, count, usedPairKeys, usage, rand) {
+  let available = candidates.filter(
+    p => !usedPairKeys.has(pairKey(p.a, p.b))
+  );
+
+  const selected = [];
+
+  while (selected.length < count) {
+    if (!available.length) {
+      throw new Error(
+        `Not enough eligible pairs: requested ${count}, selected ${selected.length}.`
+      );
+    }
+
+    const scored = available.map(pair => ({
+      pair,
+      score: (usage[pair.a] || 0) + (usage[pair.b] || 0)
+    }));
+
+    const minScore = Math.min(...scored.map(x => x.score));
+    const best = scored
+      .filter(x => x.score === minScore)
+      .map(x => x.pair);
+
+    const chosen = best[Math.floor(rand() * best.length)];
+    const key = pairKey(chosen.a, chosen.b);
+
+    selected.push(chosen);
+    usedPairKeys.add(key);
+    usage[chosen.a] = (usage[chosen.a] || 0) + 1;
+    usage[chosen.b] = (usage[chosen.b] || 0) + 1;
+
+    available = available.filter(p => pairKey(p.a, p.b) !== key);
+  }
+
+  return selected;
+}
+
+function makePairPlan(pid) {
+  if (!videoLinksLoaded) {
+    throw new Error("Video links are not loaded yet.");
+  }
+
+  const rand = seededRandom(hashString("PAIRPLAN_REAL31_" + pid));
+  const usedPairKeys = new Set();
+  const usage = {};
+
+  const samePairs = chooseBalancedPairs(
+    sameParticipantCandidates(),
+    ANALYSIS_PAIR_COUNTS.same_participant_different_detection,
+    usedPairKeys,
+    usage,
+    rand
+  );
+
+  const similarPairs = chooseBalancedPairs(
+    similarSituationCandidates(),
+    ANALYSIS_PAIR_COUNTS.similar_situation,
+    usedPairKeys,
+    usage,
+    rand
+  );
+
+  const subjectivePairs = chooseBalancedPairs(
+    subjectiveRandomCandidates(),
+    ANALYSIS_PAIR_COUNTS.random_subjective_stress,
+    usedPairKeys,
+    usage,
+    rand
+  );
+
+  let analysisPairs = shuffled(
+    [...samePairs, ...similarPairs, ...subjectivePairs],
+    rand
+  );
+
+  // Randomize Top/Bottom independently for every analysis pair.
+  analysisPairs = analysisPairs.map(pair => {
+    const firstOnTop = rand() < 0.5;
+    const topId = firstOnTop ? pair.a : pair.b;
+    const bottomId = firstOnTop ? pair.b : pair.a;
+
+    return {
+      selection_source: pair.selection_source,
+      situation_group_ids: pair.situation_group_ids || [],
+      top: VIDEOS[topId],
+      bottom: VIDEOS[bottomId]
+    };
+  });
+
+  // Use a video already appearing in the analysis pool for the identical-video QC.
+  const usedVideoIds = Array.from(new Set(
+    analysisPairs.flatMap(pair => [pair.top.video_id, pair.bottom.video_id])
+  ));
+  const checkVideoId =
+    usedVideoIds[Math.floor(rand() * usedVideoIds.length)];
+
+  const attentionCheck = {
+    selection_source: ATTENTION_CHECK_SOURCE,
+    situation_group_ids: [],
+    top: VIDEOS[checkVideoId],
+    bottom: VIDEOS[checkVideoId]
+  };
+
+  // Insert AFTER 10-20 analysis trials, i.e. displayed Trial 11-21.
+  const insertAfterAnalysisTrials = 10 + Math.floor(rand() * 11);
+  const fullPlan = analysisPairs.slice();
+  fullPlan.splice(insertAfterAnalysisTrials, 0, attentionCheck);
+
+  return fullPlan.map((pair, index) => ({
+    ...pair,
+    trial_index: index + 1
+  }));
+}
+
+function getPairPlan() {
+  const saved = localStorage.getItem(storageKey("pairPlan"));
+  if (saved) {
+    const plan = JSON.parse(saved);
+
+    // Protect against accidentally resuming an old 4-trial/test plan.
+    const validRealPlan =
+      Array.isArray(plan) &&
+      plan.length === 31 &&
+      plan.filter(p => p.selection_source === ATTENTION_CHECK_SOURCE).length === 1;
+
+    if (validRealPlan) return plan;
+
+    localStorage.removeItem(storageKey("pairPlan"));
+    localStorage.removeItem(storageKey("responses"));
+  }
+
+  const plan = makePairPlan(participantId);
+  localStorage.setItem(storageKey("pairPlan"), JSON.stringify(plan));
+  return plan;
+}
+
+
+function getResponses() {
+  return JSON.parse(localStorage.getItem(storageKey("responses")) || "[]");
+}
+
+function saveResponses(rows) {
+  localStorage.setItem(storageKey("responses"), JSON.stringify(rows));
+}
+
+function demographicsSaved() {
+  return !!localStorage.getItem(storageKey("demographics"));
+}
+
+function completedTrialNumbers() {
+  return new Set(getResponses().map(r => Number(r.trial_index)));
+}
+
+function firstUnansweredTrialIndex() {
+  const completed = completedTrialNumbers();
+  for (let i = 0; i < pairPlan.length; i++) {
+    if (!completed.has(i + 1)) return i;
+  }
+  return pairPlan.length;
+}
+
+function showOnly(screenId) {
+  ["startScreen", "demographicScreen", "experimentScreen", "endScreen"]
+    .forEach(id => {
+      document.getElementById(id).classList.toggle("hidden", id !== screenId);
+    });
+
+  if (screenId === "endScreen") {
+    renderResultCode();
+  }
+}
+
+function startOrResume() {
+  if (!surveyReady) {
+    alert("The video list is still loading. Please try again.");
+    return;
+  }
+
+  pairPlan = getPairPlan();
+
+  if (!demographicsSaved()) {
+    showOnly("demographicScreen");
+    return;
+  }
+
+  currentTrial = firstUnansweredTrialIndex();
+
+  if (currentTrial >= pairPlan.length) {
+    showOnly("endScreen");
+    return;
+  }
+
+  showOnly("experimentScreen");
+  loadTrial();
+}
+
+function handleChildrenSelection() {
+  const none = document.getElementById("childNone");
+  if (none.checked) {
+    document.getElementById("childUnder6").checked = false;
+    document.getElementById("childOver7").checked = false;
+  }
+}
+
+function selectedMultiLabels(id) {
+  return Array.from(document.getElementById(id).selectedOptions)
+    .map(option => option.text.replace(/^\d+\s-\s/, ""));
+}
+
+function value(id) {
+  return document.getElementById(id).value;
+}
+
+function validateDemographics() {
+  const requiredIds = [
+    "sexSelect", "ageSelect", "nationalitySelect", "cyclingSelect",
+    "summerConventionalBike", "winterConventionalBike",
+    "summerEBike", "winterEBike",
+    "summerEScooter", "winterEScooter",
+    "summerCargoBike", "winterCargoBike",
+    "cyclistTypeSelect"
+  ];
+
+  for (const id of requiredIds) {
+    if (!value(id)) {
+      alert("Please answer all sociodemographic questions.");
+      return false;
+    }
+  }
+
+  if (selectedMultiLabels("residentCountriesSelect").length === 0) {
+    alert("Please select at least one country where you currently reside or have lived.");
+    return false;
+  }
+
+  const childrenSelected =
+    document.getElementById("childUnder6").checked ||
+    document.getElementById("childOver7").checked ||
+    document.getElementById("childNone").checked;
+
+  if (!childrenSelected) {
+    alert("Please answer the children question.");
+    return false;
+  }
+
+  return true;
+}
+
+
+function selectedIndexCode(id) {
+  // All single-choice select boxes have "Please select" at index 0,
+  // therefore selectedIndex directly gives our stable 1-based answer code.
+  return document.getElementById(id).selectedIndex;
+}
+
+function selectedCountryCodes(id) {
+  return Array.from(document.getElementById(id).selectedOptions)
+    .map(option => Number(option.value))
+    .filter(Number.isFinite)
+    .sort((a, b) => a - b);
+}
+
+function buildDemographicCodes() {
+  const children = [];
+  if (document.getElementById("childUnder6").checked) children.push(1);
+  if (document.getElementById("childOver7").checked) children.push(2);
+  if (document.getElementById("childNone").checked) children.push(3);
+
+  return {
+    sex: selectedIndexCode("sexSelect"),
+    age: selectedIndexCode("ageSelect"),
+    nationality: Number(value("nationalitySelect")),
+    resident_countries: selectedCountryCodes("residentCountriesSelect"),
+    children: children,
+    urban_cycling_feeling: selectedIndexCode("cyclingSelect"),
+
+    summer_conventional_bike: selectedIndexCode("summerConventionalBike"),
+    winter_conventional_bike: selectedIndexCode("winterConventionalBike"),
+    summer_e_bike: selectedIndexCode("summerEBike"),
+    winter_e_bike: selectedIndexCode("winterEBike"),
+    summer_e_scooter: selectedIndexCode("summerEScooter"),
+    winter_e_scooter: selectedIndexCode("winterEScooter"),
+    summer_cargo_bike: selectedIndexCode("summerCargoBike"),
+    winter_cargo_bike: selectedIndexCode("winterCargoBike"),
+
+    cyclist_type: selectedIndexCode("cyclistTypeSelect"),
+    demographic_answered_epoch_s: Math.floor(Date.now() / 1000)
+  };
+}
+
+function saveDemographicsAndStart() {
+  if (!validateDemographics()) return;
+
+  const children = [];
+  if (document.getElementById("childUnder6").checked) children.push("Children under 6 years old");
+  if (document.getElementById("childOver7").checked) children.push("Children over 7 years old");
+  if (document.getElementById("childNone").checked) children.push("No children");
+
+  const row = {
+    participant_id: participantId,
+    sex_label: value("sexSelect"),
+    age_label: value("ageSelect"),
+    nationality_label:
+      document.getElementById("nationalitySelect")
+        .selectedOptions[0].text.replace(/^\d+\s-\s/, ""),
+    resident_country_labels: selectedMultiLabels("residentCountriesSelect").join("|"),
+    children_labels: children.join("|"),
+    urban_cycling_feeling_label: value("cyclingSelect"),
+    summer_conventional_bike_label: value("summerConventionalBike"),
+    winter_conventional_bike_label: value("winterConventionalBike"),
+    summer_e_bike_label: value("summerEBike"),
+    winter_e_bike_label: value("winterEBike"),
+    summer_e_scooter_label: value("summerEScooter"),
+    winter_e_scooter_label: value("winterEScooter"),
+    summer_cargo_bike_label: value("summerCargoBike"),
+    winter_cargo_bike_label: value("winterCargoBike"),
+    cyclist_type_label: value("cyclistTypeSelect"),
+    demographic_answered_at: new Date().toISOString()
+  };
+
+  localStorage.setItem(storageKey("demographics"), JSON.stringify(row));
+  localStorage.setItem(
+    storageKey("demographicCodes"),
+    JSON.stringify(buildDemographicCodes())
+  );
+
+  pairPlan = getPairPlan();
+  currentTrial = firstUnansweredTrialIndex();
+
+  showOnly("experimentScreen");
+  loadTrial();
+}
+
+function onYouTubeIframeAPIReady() {
+  youtubePlayer = new YT.Player("youtubePlayer", {
+    width: 960,
+    height: 540,
+    videoId: "",
+    playerVars: {
+      autoplay: 0,
+      controls: 0,
+      disablekb: 1,
+      fs: 0,
+      playsinline: 1,
+      rel: 0,
+      origin: window.location.origin
+    },
+    events: {
+      onReady: onPlayerReady,
+      onStateChange: onPlayerStateChange,
+      onAutoplayBlocked: onAutoplayBlocked,
+      onError: onPlayerError
+    }
+  });
+}
+
+function onPlayerReady(event) {
+  playerReady = true;
+  event.target.mute();
+
+  try {
+    const iframe = event.target.getIframe();
+    iframe.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+    iframe.setAttribute(
+      "allow",
+      "autoplay; encrypted-media; picture-in-picture"
+    );
+  } catch (e) {
+    console.warn(e);
+  }
+
+  if (!document.getElementById("experimentScreen").classList.contains("hidden")) {
+    prepareTrialVideo();
+  }
+}
+
+function enableAnswerButtons(enabled) {
+  ["btnTop", "btnSame", "btnBottom"].forEach(id => {
+    document.getElementById(id).disabled = !enabled;
+  });
+}
+
+function resetPlaybackState() {
+  playbackStarted = false;
+  playbackPart = "idle";
+  topEnded = false;
+  bottomEnded = false;
+  playbackStartPerf = null;
+  playbackEndPerf = null;
+  enableAnswerButtons(false);
+  document.getElementById("finishedOverlay").style.display = "none";
+  document.getElementById("youtubePlayer").style.visibility = "visible";
+}
+
+function prepareTrialVideo() {
+  if (!playerReady || currentTrial >= pairPlan.length) return;
+  const pair = pairPlan[currentTrial];
+
+  youtubePlayer.mute();
+  youtubePlayer.cueVideoById(pair.top.youtube_id, 0);
+
+  document.getElementById("currentVideoLabel").innerText = "Top video";
+}
+
+function loadTrial() {
+  if (currentTrial >= pairPlan.length) {
+    showOnly("endScreen");
+    return;
+  }
+
+  resetPlaybackState();
+
+  document.getElementById("progressText").innerText =
+    `Trial ${currentTrial + 1} / ${pairPlan.length}`;
+
+  document.getElementById("statusText").innerText =
+    "Press “Play video sequence” to start.";
+
+  const btn = document.getElementById("playSequenceButton");
+  btn.disabled = false;
+  btn.innerText = "Play video sequence";
+
+  if (playerReady) {
+    prepareTrialVideo();
+  } else {
+    document.getElementById("statusText").innerText =
+      "Loading YouTube player...";
+  }
+}
+
+function playSequence() {
+  if (!playerReady) {
+    document.getElementById("statusText").innerText =
+      "YouTube player is still loading.";
+    return;
+  }
+
+  const pair = pairPlan[currentTrial];
+
+  // Fallback if browser blocks only the automatic Top -> Bottom transition.
+  if (playbackPart === "bottom" && topEnded && !bottomEnded) {
+    const btn = document.getElementById("playSequenceButton");
+    btn.disabled = true;
+    btn.innerText = "Playing...";
+
+    youtubePlayer.mute();
+    youtubePlayer.loadVideoById(pair.bottom.youtube_id, 0);
+    return;
+  }
+
+  resetPlaybackState();
+  playbackStarted = true;
+  playbackPart = "top";
+  playbackStartPerf = performance.now();
+
+  const btn = document.getElementById("playSequenceButton");
+  btn.disabled = true;
+  btn.innerText = "Playing...";
+
+  document.getElementById("currentVideoLabel").innerText = "Top video";
+  document.getElementById("statusText").innerText =
+    "Playing Top video... Bottom will start automatically.";
+
+  youtubePlayer.mute();
+  youtubePlayer.loadVideoById(pair.top.youtube_id, 0);
+}
+
+function onPlayerStateChange(event) {
+  if (event.data !== YT.PlayerState.ENDED || !playbackStarted) return;
+
+  const pair = pairPlan[currentTrial];
+
+  if (playbackPart === "top" && !topEnded) {
+    topEnded = true;
+    playbackPart = "bottom";
+
+    document.getElementById("currentVideoLabel").innerText = "Bottom video";
+    document.getElementById("statusText").innerText = "Playing Bottom video...";
+
+    youtubePlayer.mute();
+    youtubePlayer.loadVideoById(pair.bottom.youtube_id, 0);
+    return;
+  }
+
+  if (playbackPart === "bottom" && !bottomEnded) {
+    bottomEnded = true;
+    playbackPart = "finished";
+    playbackEndPerf = performance.now();
+
+    enableAnswerButtons(true);
+
+    document.getElementById("youtubePlayer").style.visibility = "hidden";
+    document.getElementById("finishedOverlay").style.display = "flex";
+
+    const btn = document.getElementById("playSequenceButton");
+    btn.disabled = false;
+    btn.innerText = "Replay video sequence";
+
+    document.getElementById("statusText").innerText =
+      "Both videos finished. Please choose Top video, Same, or Bottom video.";
+  }
+}
+
+function onAutoplayBlocked(event) {
+  if (playbackPart === "bottom" && topEnded && !bottomEnded) {
+    const btn = document.getElementById("playSequenceButton");
+    btn.disabled = false;
+    btn.innerText = "Continue Bottom video";
+    document.getElementById("statusText").innerText =
+      "Automatic Bottom playback was blocked. Press “Continue Bottom video”.";
+  }
+}
+
+function onPlayerError(event) {
+  const messages = {
+    2: "Invalid YouTube video ID or parameter.",
+    5: "YouTube HTML5 playback error.",
+    100: "Video unavailable or private.",
+    101: "Embedding is disabled for this video.",
+    150: "Embedding is disabled for this video.",
+    153: "YouTube did not receive the required Referer/client identity."
+  };
+
+  document.getElementById("statusText").innerText =
+    `YouTube error ${event.data}: ${messages[event.data] || "Unknown error."}`;
+
+  document.getElementById("playSequenceButton").disabled = false;
+}
+
+function submitAnswer(choice) {
+  if (!(topEnded && bottomEnded)) {
+    alert("Please watch both videos to the end.");
+    return;
+  }
+
+  const pair = pairPlan[currentTrial];
+  const rows = getResponses();
+
+  // Prevent duplicate trial rows.
+  if (rows.some(r => Number(r.trial_index) === currentTrial + 1)) {
+    currentTrial = firstUnansweredTrialIndex();
+    loadTrial();
+    return;
+  }
+
+  let chosenVideoId = "same";
+  if (choice === "top") chosenVideoId = pair.top.video_id;
+  if (choice === "bottom") chosenVideoId = pair.bottom.video_id;
+
+  const row = {
+    participant_id: participantId,
+    trial_index: currentTrial + 1,
+    selection_source: pair.selection_source,
+    situation_group_ids: pair.situation_group_ids.join("|"),
+
+    top_video_id: pair.top.video_id,
+    top_filename: pair.top.filename,
+    top_participant_id: pair.top.participant_id,
+    top_event_id: pair.top.event_id,
+    top_stress: pair.top.stress,
+    top_stress_detection: pair.top.stress_detection,
+
+    bottom_video_id: pair.bottom.video_id,
+    bottom_filename: pair.bottom.filename,
+    bottom_participant_id: pair.bottom.participant_id,
+    bottom_event_id: pair.bottom.event_id,
+    bottom_stress: pair.bottom.stress,
+    bottom_stress_detection: pair.bottom.stress_detection,
+
+    chosen_video_id: chosenVideoId,
+    answered_at: new Date().toISOString(),
+    watch_time_ms: Math.round(playbackEndPerf - playbackStartPerf),
+    response_time_after_video_end_ms:
+      Math.round(performance.now() - playbackEndPerf)
+  };
+
+  rows.push(row);
+  rows.sort((a, b) => Number(a.trial_index) - Number(b.trial_index));
+  saveResponses(rows);
+
+  currentTrial = firstUnansweredTrialIndex();
+
+  if (currentTrial >= pairPlan.length) {
+    showOnly("endScreen");
+  } else {
+    loadTrial();
+  }
+}
+
+
+// =====================================================================
+// COMPACT RESULT CODE
+//
+// Format:
+//   PARTICIPANT_ID|ENCRYPTED_DEMOGRAPHICS|TRIALS
+//
+// The demographic section is hybrid-encrypted in the browser:
+//   - fresh random AES-256-GCM key for each result
+//   - demographic payload encrypted with AES-GCM
+//   - AES key encrypted with the embedded RSA-OAEP public key
+//
+// The matching RSA PRIVATE key is NOT in GitHub and is required to decode.
+//
+// Encrypted demographic segment:
+//   <RSA_ENCRYPTED_AES_KEY>.<IV>.<AES_GCM_CIPHERTEXT>
+//
+// Video/trial section remains intentionally readable:
+//   SOURCE,TOP_ID,BOTTOM_ID,WINNER_ID,RESPONSE_MS,WATCH_MS,ANSWER_EPOCH
+//
+// SOURCE:
+//   1 = same participant / different detection
+//   2 = similar situation
+//   3 = random subjective-only stress pair
+//   9 = identical-video attention/QC check
+//
+// WINNER_ID:
+//   0 = Same
+//   otherwise the winning VideoID
+//
+// Trial order itself is trial_index.
+// =====================================================================
+
+function unixSecondsFromIso(isoString) {
+  const ms = Date.parse(isoString);
+  return Number.isFinite(ms) ? Math.floor(ms / 1000) : 0;
+}
+
+function sourceCode(selectionSource) {
+  if (selectionSource === "same_participant_different_detection") return 1;
+  if (selectionSource === "similar_situation") return 2;
+  if (selectionSource === "random_subjective_stress") return 3;
+  if (selectionSource === "attention_check") return 9;
+  return 0;
+}
+
+function demographicCodesFromSavedLabels() {
+  // Fallback only for a browser session created with the older page.
+  const row = JSON.parse(
+    localStorage.getItem(storageKey("demographics")) || "{}"
+  );
+
+  const sex = ["Male", "Female", "Prefer not to say", "Other"];
+  const age = ["<20", "21-25", "26-30", "31-35", "36-40",
+               "41-45", "46-50", "51-55", "56-60", ">61"];
+  const cycling = [
+    "Very uncomfortable", "Slightly uncomfortable", "Neutral",
+    "Somewhat confident", "Very confident", "I don't know"
+  ];
+  const freq = [
+    "Never", "Less than one day in a week", "One or two days in a week",
+    "Three to five days in a week", "Almost every day"
+  ];
+  const cyclist = [
+    "Strong and Fearless : I am comfortable cycling in all conditions, with or without dedicated bike infrastructure.",
+    "Enthused and Confident : I am comfortable cycling on roads with cars, but I prefer having dedicated cycling infrastructure.",
+    "Interested but Concerned : I am open to cycling, but only if there is high-quality infrastructure and I feel safe.",
+    "No Way, No How : I am not willing to cycle, even if good infrastructure is provided."
+  ];
+
+  function oneBasedIndex(arr, label) {
+    const i = arr.indexOf(label);
+    return i >= 0 ? i + 1 : 0;
+  }
+
+  return {
+    sex: oneBasedIndex(sex, row.sex_label),
+    age: oneBasedIndex(age, row.age_label),
+    nationality: 0,
+    resident_countries: [],
+    children: [],
+    urban_cycling_feeling: oneBasedIndex(cycling, row.urban_cycling_feeling_label),
+    summer_conventional_bike: oneBasedIndex(freq, row.summer_conventional_bike_label),
+    winter_conventional_bike: oneBasedIndex(freq, row.winter_conventional_bike_label),
+    summer_e_bike: oneBasedIndex(freq, row.summer_e_bike_label),
+    winter_e_bike: oneBasedIndex(freq, row.winter_e_bike_label),
+    summer_e_scooter: oneBasedIndex(freq, row.summer_e_scooter_label),
+    winter_e_scooter: oneBasedIndex(freq, row.winter_e_scooter_label),
+    summer_cargo_bike: oneBasedIndex(freq, row.summer_cargo_bike_label),
+    winter_cargo_bike: oneBasedIndex(freq, row.winter_cargo_bike_label),
+    cyclist_type: oneBasedIndex(cyclist, row.cyclist_type_label),
+    demographic_answered_epoch_s: unixSecondsFromIso(row.demographic_answered_at)
+  };
+}
+
+function getDemographicCodes() {
+  const saved = localStorage.getItem(storageKey("demographicCodes"));
+  if (saved) return JSON.parse(saved);
+  return demographicCodesFromSavedLabels();
+}
+
+function demographicPlaintext() {
+  const d = getDemographicCodes();
+
+  // Deliberately NOT questionnaire order.
+  // This order is an internal  packing order only.
+  //
+  //  1 nationality
+  //  2 cyclist type
+  //  3 resident countries (multi)
+  //  4 winter e-scooter
+  //  5 age
+  //  6 children (multi)
+  //  7 summer conventional bike
+  //  8 sex
+  //  9 winter cargo bike
+  // 10 urban cycling feeling
+  // 11 summer e-bike
+  // 12 winter conventional bike
+  // 13 summer cargo bike
+  // 14 winter e-bike
+  // 15 summer e-scooter
+  // 16 demographic timestamp
+  return [
+    d.nationality,
+    d.cyclist_type,
+    (d.resident_countries || []).join("+"),
+    d.winter_e_scooter,
+    d.age,
+    (d.children || []).join("+"),
+    d.summer_conventional_bike,
+    d.sex,
+    d.winter_cargo_bike,
+    d.urban_cycling_feeling,
+    d.summer_e_bike,
+    d.winter_conventional_bike,
+    d.summer_cargo_bike,
+    d.winter_e_bike,
+    d.summer_e_scooter,
+    d.demographic_answered_epoch_s || 0
+  ].join("/");
+}
+
+function pemToArrayBuffer(pem) {
+  const b64 = pem
+    .replace(/-----BEGIN PUBLIC KEY-----/g, "")
+    .replace(/-----END PUBLIC KEY-----/g, "")
+    .replace(/\s+/g, "");
+
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+
+  return bytes.buffer;
+}
+
+function bytesToBase64Url(bytes) {
+  let binary = "";
+  const arr = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+
+  for (let i = 0; i < arr.length; i++) {
+    binary += String.fromCharCode(arr[i]);
+  }
+
+  return btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
+}
+
+async function importDemographicPublicKey() {
+  return crypto.subtle.importKey(
+    "spki",
+    pemToArrayBuffer(DEMOGRAPHIC_RSA_PUBLIC_KEY_PEM),
+    {
+      name: "RSA-OAEP",
+      hash: "SHA-256"
+    },
+    false,
+    ["encrypt"]
+  );
+}
+
+async function encryptDemographics() {
+  const plaintextBytes = new TextEncoder().encode(demographicPlaintext());
+
+  // Random AES-256 key for this participant result.
+  const aesKey = await crypto.subtle.generateKey(
+    {
+      name: "AES-GCM",
+      length: 256
+    },
+    true,
+    ["encrypt"]
+  );
+
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+
+  const ciphertext = await crypto.subtle.encrypt(
+    {
+      name: "AES-GCM",
+      iv: iv
+    },
+    aesKey,
+    plaintextBytes
+  );
+
+  const rawAesKey = await crypto.subtle.exportKey("raw", aesKey);
+  const rsaPublicKey = await importDemographicPublicKey();
+
+  const encryptedAesKey = await crypto.subtle.encrypt(
+    {
+      name: "RSA-OAEP"
+    },
+    rsaPublicKey,
+    rawAesKey
+  );
+
+  return [
+    bytesToBase64Url(encryptedAesKey),
+    bytesToBase64Url(iv),
+    bytesToBase64Url(ciphertext)
+  ].join(".");
+}
+
+async function generateResultCode() {
+  // Reuse the already-generated encrypted demographic segment for this PID
+  // so reopening the completed page gives the exact same final code.
+  let encryptedDemo = localStorage.getItem(
+    storageKey("encryptedDemographics")
+  );
+
+  if (!encryptedDemo) {
+    encryptedDemo = await encryptDemographics();
+    localStorage.setItem(
+      storageKey("encryptedDemographics"),
+      encryptedDemo
+    );
+  }
+
+  const responses = getResponses()
+    .slice()
+    .sort((a, b) => Number(a.trial_index) - Number(b.trial_index));
+
+  const trialFields = responses.map(row => {
+    const winner =
+      row.chosen_video_id === "same" ? 0 : Number(row.chosen_video_id);
+
+    return [
+      sourceCode(row.selection_source),
+      Number(row.top_video_id),
+      Number(row.bottom_video_id),
+      winner,
+      Number(row.response_time_after_video_end_ms),
+      Number(row.watch_time_ms),
+      unixSecondsFromIso(row.answered_at)
+    ].join(",");
+  });
+
+  return [
+    participantId,
+    encryptedDemo,
+    trialFields.join(";")
+  ].join("|");
+}
+
+async function renderResultCode() {
+  const box = document.getElementById("resultCodeBox");
+  if (!box) return;
+
+  box.value = "Generating encrypted result code...";
+  document.getElementById("formStatusText").innerText =
+    "Encrypting demographic responses...";
+
+  try {
+    const code = await generateResultCode();
+    box.value = code;
+    document.getElementById("resultCodeLength").innerText = code.length;
+
+    if (code.length > 3900) {
+      document.getElementById("formStatusText").innerText =
+        "Warning: result code is close to or above the Microsoft Forms single-answer limit.";
+    } else {
+      document.getElementById("formStatusText").innerText =
+        "Your result is ready. Please submit it using Microsoft Forms.";
+    }
+  } catch (err) {
+    console.error(err);
+    box.value = "";
+    document.getElementById("formStatusText").innerText =
+      "Could not encrypt the demographic result. Please reload the page.";
+  }
+}
+
+async function copyResultCode() {
+  const code = await generateResultCode();
+
+  try {
+    await navigator.clipboard.writeText(code);
+    document.getElementById("formStatusText").innerText =
+      "Result code copied.";
+  } catch (err) {
+    const box = document.getElementById("resultCodeBox");
+    box.value = code;
+    box.focus();
+    box.select();
+    document.execCommand("copy");
+    document.getElementById("formStatusText").innerText =
+      "Result code copied.";
+  }
+}
+
+function buildPrefilledMicrosoftFormUrl(code) {
+  const template = MICROSOFT_FORM_PREFILLED_URL.trim();
+
+  if (!/^https?:\/\//i.test(template)) return null;
+
+  const encodedPlaceholder = encodeURIComponent(MICROSOFT_FORM_PLACEHOLDER);
+  const encodedCode = encodeURIComponent(code);
+
+  if (template.includes(encodedPlaceholder)) {
+    return template.split(encodedPlaceholder).join(encodedCode);
+  }
+
+  if (template.includes(MICROSOFT_FORM_PLACEHOLDER)) {
+    return template.split(MICROSOFT_FORM_PLACEHOLDER).join(encodedCode);
+  }
+
+  return null;
+}
+
+async function submitPartialResult() {
+  const completed = getResponses().length;
+  const status = document.getElementById("partialStatusText");
+
+  if (completed === 0) {
+    status.innerText =
+      "Please complete at least one video comparison before saving a partial result.";
+    return;
+  }
+
+  try {
+    const code = await generateResultCode();
+
+    try {
+      await navigator.clipboard.writeText(code);
+    } catch (err) {
+      console.warn("Clipboard copy failed:", err);
+    }
+
+    const url = buildPrefilledMicrosoftFormUrl(code);
+
+    if (!url) {
+      status.innerText =
+        "Microsoft Forms could not be opened. The partial result code was copied.";
+      return;
+    }
+
+    status.innerText =
+      `Partial result prepared (${completed} completed trial(s)). ` +
+      "Please press Submit in Microsoft Forms. You may then return later using the same browser.";
+
+    window.open(url, "_blank", "noopener,noreferrer");
+  } catch (err) {
+    console.error(err);
+    status.innerText = "Could not prepare the partial result.";
+  }
+}
+
+async function copyAndOpenMicrosoftForm() {
+  const code = await generateResultCode();
+
+  // Always copy as fallback.
+  try {
+    await navigator.clipboard.writeText(code);
+  } catch (err) {
+    console.warn("Clipboard copy failed:", err);
+  }
+
+  const url = buildPrefilledMicrosoftFormUrl(code);
+
+  if (!url) {
+    document.getElementById("formStatusText").innerText =
+      "Microsoft Forms URL is not configured yet. The result code was copied; paste it manually into the Form.";
+    return;
+  }
+
+  document.getElementById("formStatusText").innerText =
+    "Opening Microsoft Forms with the encrypted result code pre-filled. Please press Submit there.";
+
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+
+
+async function initializeSurvey() {
+  participantId = getOrCreateParticipantId();
+  document.getElementById("pidDisplay").innerText = participantId;
+
+  const button = document.getElementById("startResumeButton");
+  const status = document.getElementById("setupStatus");
+
+  try {
+    status.innerText = "Loading video list...";
+    await loadVideoLinks();
+    pairPlan = getPairPlan();
+    surveyReady = true;
+    button.disabled = false;
+    button.innerText = "Start / Resume";
+    status.innerText = "";
+  } catch (err) {
+    console.error(err);
+    surveyReady = false;
+    button.disabled = true;
+    button.innerText = "Video setup error";
+    status.innerText =
+      "Could not load the video list. Please contact the researcher. " + err.message;
+  }
+}
+
+initializeSurvey();
+</script>
+</body>
+</html>
