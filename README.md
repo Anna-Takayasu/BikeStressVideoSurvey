@@ -12,11 +12,6 @@ Thank you for taking part in this study.
 ## Survey link
 
 Open:
-<button onclick="window.open('https://anna-takayasu.github.io/VideoSurvey/BikeStressVideoSurvey/', '_blank', 'noopener,noreferrer')">
-  Open video survey
-</button>
-
-
 [
 https://Anna-Takayasu.github.io/BikeStressVideoSurvey/](https://anna-takayasu.github.io/BikeStressVideoSurvey/)
 
