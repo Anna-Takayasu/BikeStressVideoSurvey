@@ -1250,6 +1250,47 @@ const ATTENTION_CHECK_SOURCE = "attention_check";
 let videoLinksLoaded = false;
 let surveyReady = false;
 
+// ---------------------------------------------------------------------
+// GLOBAL STATE + PARTICIPANT ID HELPERS
+// ---------------------------------------------------------------------
+
+let participantId = "";
+let pairPlan = [];
+let currentTrial = 0;
+
+let youtubePlayer = null;
+let playerReady = false;
+
+let playbackStarted = false;
+let playbackPart = "idle";
+let topEnded = false;
+let bottomEnded = false;
+let playbackStartPerf = null;
+let playbackEndPerf = null;
+
+function getOrCreateParticipantId() {
+  const key = "BikeStressVideoSurvey_participantId";
+  let pid = localStorage.getItem(key);
+
+  if (!pid) {
+    const now = new Date();
+    const stamp = now.toISOString()
+      .replace(/[-:.TZ]/g, "")
+      .slice(0, 14);
+
+    const rand = Math.random().toString(36).slice(2, 8).toUpperCase();
+    pid = "VS_" + stamp + "_" + rand;
+
+    localStorage.setItem(key, pid);
+  }
+
+  return pid;
+}
+
+function storageKey(name) {
+  return "BikeStressVideoSurvey_" + participantId + "_" + name;
+}
+  
 function normalizeVideoId(raw) {
   const text = String(raw || "").trim();
   const m = text.match(/^(?:V)?0*(\d+)$/i);
