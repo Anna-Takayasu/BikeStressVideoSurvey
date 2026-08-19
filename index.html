@@ -9,7 +9,7 @@
     * { box-sizing: border-box; }
     body {
       font-family: Arial, sans-serif;
-      max-width: 1050px;
+      max-width: 1400px;
       margin: 28px auto;
       padding: 0 18px 50px;
       background: #f7f7f7;
@@ -90,8 +90,8 @@
       position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
-      min-height: 270px;
-      max-height: 540px;
+      min-height: 360px;
+      max-height: 720px;
       background: black;
       overflow: hidden;
       border-radius: 8px;
@@ -651,7 +651,7 @@
     <div class="progress" id="progressText"></div>
     <p><b>Question:</b> Which video looks more stressful / unsafe?</p>
     <p class="small">
-      Press the button once. The Top video will play first and the Bottom video will start automatically.
+      Press the "Play video sequence" button. The Top video will play first and the Bottom video will start automatically.
       Both are muted.
     </p>
 
@@ -675,6 +675,12 @@
 
     <p class="small" id="statusText"></p>
 
+    <p class="small notice hidden" id="videoLoadingHint">
+      If the video player keeps loading for a long time, please refresh the page.
+      Your previous completed answers should remain saved if you use the same device,
+      same browser, and the same survey URL.
+    </p>
+    
     <div style="margin-top:24px;text-align:center;">
       <p class="small">
         Need to stop now? You can save the answers completed so far and continue later on this device.
@@ -1267,7 +1273,8 @@ let topEnded = false;
 let bottomEnded = false;
 let playbackStartPerf = null;
 let playbackEndPerf = null;
-
+let longLoadingTimer = null;
+  
 function getOrCreateParticipantId() {
   const key = "BikeStressVideoSurvey_participantId";
   let pid = localStorage.getItem(key);
@@ -1861,7 +1868,7 @@ function onYouTubeIframeAPIReady() {
     videoId: "",
     playerVars: {
       autoplay: 0,
-      controls: 0,
+      controls: 1,
       disablekb: 1,
       fs: 0,
       playsinline: 1,
@@ -1914,7 +1921,29 @@ function resetPlaybackState() {
   document.getElementById("finishedOverlay").style.display = "none";
   document.getElementById("youtubePlayer").style.visibility = "visible";
 }
+function showVideoLoadingHint() {
+  const hint = document.getElementById("videoLoadingHint");
+  if (hint) hint.classList.remove("hidden");
+}
 
+function hideVideoLoadingHint() {
+  const hint = document.getElementById("videoLoadingHint");
+  if (hint) hint.classList.add("hidden");
+
+  if (longLoadingTimer) {
+    clearTimeout(longLoadingTimer);
+    longLoadingTimer = null;
+  }
+}
+
+function startLongLoadingTimer() {
+  hideVideoLoadingHint();
+
+  longLoadingTimer = setTimeout(() => {
+    showVideoLoadingHint();
+  }, 15000); // show hint after 15 seconds
+}
+  
 function prepareTrialVideo() {
   if (!playerReady || currentTrial >= pairPlan.length) return;
   const pair = pairPlan[currentTrial];
@@ -1944,17 +1973,20 @@ function loadTrial() {
   btn.innerText = "Play video sequence";
 
   if (playerReady) {
+    hideVideoLoadingHint();
     prepareTrialVideo();
   } else {
     document.getElementById("statusText").innerText =
       "Loading YouTube player...";
+    startLongLoadingTimer();
   }
 }
 
 function playSequence() {
   if (!playerReady) {
     document.getElementById("statusText").innerText =
-      "YouTube player is still loading.";
+      "YouTube player is still loading. Please wait a moment.";
+    showVideoLoadingHint();
     return;
   }
 
@@ -1986,9 +2018,17 @@ function playSequence() {
 
   youtubePlayer.mute();
   youtubePlayer.loadVideoById(pair.top.youtube_id, 0);
+  startLongLoadingTimer();
 }
 
 function onPlayerStateChange(event) {
+  if (event.data === YT.PlayerState.PLAYING) {
+    hideVideoLoadingHint();
+  }
+  
+  if (event.data === YT.PlayerState.BUFFERING) {
+    startLongLoadingTimer();
+  }
   if (event.data !== YT.PlayerState.ENDED || !playbackStarted) return;
 
   const pair = pairPlan[currentTrial];
@@ -2048,6 +2088,7 @@ function onPlayerError(event) {
     `YouTube error ${event.data}: ${messages[event.data] || "Unknown error."}`;
 
   document.getElementById("playSequenceButton").disabled = false;
+  showVideoLoadingHint();
 }
 
 function submitAnswer(choice) {
