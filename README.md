@@ -20,16 +20,16 @@ https://Anna-Takayasu.github.io/BikeStressVideoSurvey/](https://anna-takayasu.gi
 1. Click **Start / Resume**.
 2. Complete the short sociodemographic questionnaire.
 3. For each comparison, click **Play video sequence**.
-4. The **Top video** plays first, followed automatically by the **Bottom video**.
+4. The **Video A** plays first, followed automatically by the **Video B**.
 5. Please watch both videos completely.
 6. Answer the question:
 
    **Which video looks more stressful / unsafe?**
 
    Choose:
-   - **Top video**
+   - **Video A**
    - **Same**
-   - **Bottom video**
+   - **Video B**
 
 7. Continue until the survey is finished.
 
