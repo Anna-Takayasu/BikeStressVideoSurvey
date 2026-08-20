@@ -650,13 +650,13 @@
   <div id="experimentScreen" class="hidden">
     <div class="progress" id="progressText"></div>
     <p><b>Question:</b> Which video looks more stressful / unsafe?</p>
-    <p class="small">
+    <p style="font-size:16px; line-height:1.5;">
       Press the "Play video sequence" button. Video A will play first and Video B will start automatically.
       Both are muted.
     </p>
     
-    <p class="small">
-      Please note that, for response quality control, some comparisons may show the same video as both Video A and Video B.
+    <p class="small" style="font-size:13px;">
+      *Please note that, for response quality control, some comparisons may show the same video as both Video A and Video B.
       In this case, please select <b>"Same"</b>.
     </p>
 
@@ -2050,9 +2050,9 @@ function playSequence() {
   btn.disabled = true;
   btn.innerText = "Playing...";
 
-  document.getElementById("currentVideoLabel").innerText = "Top video";
+  document.getElementById("currentVideoLabel").innerText = "Video A";
   document.getElementById("statusText").innerText =
-    "Playing Top video... Bottom will start automatically.";
+    "Playing Video A... Video B will start automatically.";
 
   youtubePlayer.mute();
   youtubePlayer.loadVideoById(pair.top.youtube_id, 0);
@@ -2075,8 +2075,8 @@ function onPlayerStateChange(event) {
     topEnded = true;
     playbackPart = "bottom";
 
-    document.getElementById("currentVideoLabel").innerText = "Bottom video";
-    document.getElementById("statusText").innerText = "Playing Bottom video...";
+    document.getElementById("currentVideoLabel").innerText = "Video B";
+    document.getElementById("statusText").innerText = "Playing Video B...";
 
     youtubePlayer.mute();
     youtubePlayer.loadVideoById(pair.bottom.youtube_id, 0);
@@ -2098,7 +2098,7 @@ function onPlayerStateChange(event) {
     btn.innerText = "Replay video sequence";
 
     document.getElementById("statusText").innerText =
-      "Both videos finished. Please choose Top video, Same, or Bottom video.";
+      "Both videos finished. Please choose Video A, Same, or Video B.";
   }
 }
 
@@ -2106,9 +2106,9 @@ function onAutoplayBlocked(event) {
   if (playbackPart === "bottom" && topEnded && !bottomEnded) {
     const btn = document.getElementById("playSequenceButton");
     btn.disabled = false;
-    btn.innerText = "Continue Bottom video";
+    btn.innerText = "Continue Video B";
     document.getElementById("statusText").innerText =
-      "Automatic Bottom playback was blocked. Press “Continue Bottom video”.";
+      "Automatic Video B playback was blocked. Press “Continue Video B”.";
   }
 }
 
