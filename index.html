@@ -651,12 +651,17 @@
     <div class="progress" id="progressText"></div>
     <p><b>Question:</b> Which video looks more stressful / unsafe?</p>
     <p class="small">
-      Press the "Play video sequence" button. The Top video will play first and the Bottom video will start automatically.
+      Press the "Play video sequence" button. Video A will play first and Video B will start automatically.
       Both are muted.
+    </p>
+    
+    <p class="small">
+      Please note that, for response quality control, some comparisons may show the same video as both Video A and Video B.
+      In this case, please select <b>"Same"</b>.
     </p>
 
     <div class="youtube-panel">
-      <div class="video-label" id="currentVideoLabel">Top video</div>
+      <div class="video-label" id="currentVideoLabel">Video A</div>
       <div class="youtube-stage">
         <div id="youtubePlayer"></div>
         <div id="finishedOverlay">Both videos finished</div>
@@ -668,9 +673,9 @@
     </div>
 
     <div class="buttons">
-      <button id="btnTop" onclick="submitAnswer('top')" disabled>Top video</button>
+      <button id="btnTop" onclick="submitAnswer('top')" disabled>Video A</button>
       <button id="btnSame" onclick="submitAnswer('same')" disabled>Same</button>
-      <button id="btnBottom" onclick="submitAnswer('bottom')" disabled>Bottom video</button>
+      <button id="btnBottom" onclick="submitAnswer('bottom')" disabled>Video B</button>
     </div>
 
     <p class="small" id="statusText"></p>
@@ -1632,24 +1637,42 @@ function makePairPlan(pid) {
     };
   });
 
-  // Use a video already appearing in the analysis pool for the identical-video QC.
+  // Use two different videos already appearing in the analysis pool
+  // for identical-video quality-control checks.
   const usedVideoIds = Array.from(new Set(
     analysisPairs.flatMap(pair => [pair.top.video_id, pair.bottom.video_id])
   ));
-  const checkVideoId =
-    usedVideoIds[Math.floor(rand() * usedVideoIds.length)];
-
-  const attentionCheck = {
+  
+  const qcCandidates = shuffled(usedVideoIds, rand);
+  
+  const checkVideoId1 = qcCandidates[0];
+  const checkVideoId2 = qcCandidates[1];
+  
+  const attentionCheck1 = {
     selection_source: ATTENTION_CHECK_SOURCE,
     situation_group_ids: [],
-    top: VIDEOS[checkVideoId],
-    bottom: VIDEOS[checkVideoId]
+    top: VIDEOS[checkVideoId1],
+    bottom: VIDEOS[checkVideoId1]
   };
-
-  // Insert AFTER 10-20 analysis trials, i.e. displayed Trial 11-21.
-  const insertAfterAnalysisTrials = 10 + Math.floor(rand() * 11);
+  
+  const attentionCheck2 = {
+    selection_source: ATTENTION_CHECK_SOURCE,
+    situation_group_ids: [],
+    top: VIDEOS[checkVideoId2],
+    bottom: VIDEOS[checkVideoId2]
+  };
+  
+  // First QC: after 10-15 analysis trials
+  const insertAfter1 = 10 + Math.floor(rand() * 6);
+  
+  // Second QC: after 20-27 analysis trials
+  const insertAfter2 = 20 + Math.floor(rand() * 8);
+  
   const fullPlan = analysisPairs.slice();
-  fullPlan.splice(insertAfterAnalysisTrials, 0, attentionCheck);
+  
+  // Insert later QC first so the first insertion does not shift it.
+  fullPlan.splice(insertAfter2, 0, attentionCheck2);
+  fullPlan.splice(insertAfter1, 0, attentionCheck1);
 
   return fullPlan.map((pair, index) => ({
     ...pair,
@@ -1665,8 +1688,8 @@ function getPairPlan() {
     // Protect against accidentally resuming an old 4-trial/test plan.
     const validRealPlan =
       Array.isArray(plan) &&
-      plan.length === 31 &&
-      plan.filter(p => p.selection_source === ATTENTION_CHECK_SOURCE).length === 1;
+      plan.length === 32 &&
+      plan.filter(p => p.selection_source === ATTENTION_CHECK_SOURCE).length === 2;
 
     if (validRealPlan) return plan;
 
