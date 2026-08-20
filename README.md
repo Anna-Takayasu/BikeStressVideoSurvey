@@ -53,3 +53,6 @@ At the end of the survey:
 After Microsoft Forms confirms your submission, the survey is complete.
 
 Thank you very much for your participation.
+
+
+If you have any questions: vt_researchexperiment.vtk@ed.tum.de
